@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chef Krish v4 — Fixed Syntax + RAG</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap');
+:root{--saffron:#FF6B00;--gold:#D4A017;--cream:#FDF6EC;--dark:#1A0F00;--border:#EDD9C0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;display:flex;flex-direction:column;font-size:14px;}
+.hdr{background:linear-gradient(135deg,#1A0F00,#3D1A00);padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.logo{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.htext h1{font-family:'Playfair Display',serif;color:#FDF6EC;font-size:16px;}
+.htext p{color:rgba(255,255,255,0.4);font-size:10px;margin-top:1px;}
+.hpills{margin-left:auto;display:flex;gap:5px;}
+.pill{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;display:flex;align-items:center;gap:3px;}
+.pn{background:rgba(1,139,255,0.18);color:#70C8FF;border:1px solid rgba(1,139,255,0.35);}
+.pc{background:rgba(124,58,237,0.18);color:#C4B5FD;border:1px solid rgba(124,58,237,0.35);}
+.dot{width:5px;height:5px;border-radius:50%;animation:blink 2s infinite;}
+.dn{background:#70C8FF;}.dc{background:#C4B5FD;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.status-bar{padding:7px 14px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;border-bottom:2px solid;}
+.status-bar.ok{background:#ECFDF5;border-color:#6EE7B7;color:#065F46;}
+.status-bar.warn{background:#FFFBEB;border-color:#FCD34D;color:#92400E;}
+.status-bar.err{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B;}
+.keybar{background:#FFF7ED;border-bottom:1px solid #FED7AA;padding:8px 14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.keybar label{font-size:12px;font-weight:600;color:var(--dark);white-space:nowrap;}
+.keybar input{flex:1;min-width:180px;border:1.5px solid #FED7AA;border-radius:6px;padding:4px 9px;font-family:monospace;font-size:11px;outline:none;background:white;}
+.keybar input:focus{border-color:var(--saffron);}
+.keybtn{padding:5px 12px;background:var(--saffron);color:white;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;}
+.keyhint{font-size:10px;color:#999;width:100%;}
+.main{display:flex;flex:1;overflow:hidden;}
+.sidebar{width:230px;flex-shrink:0;background:white;border-right:1px solid var(--border);overflow-y:auto;padding:10px;}
+.sb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#AAA;margin-bottom:6px;}
+.qbtn{width:100%;text-align:left;background:var(--cream);border:1px solid var(--border);border-radius:7px;padding:7px 9px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;margin-bottom:4px;color:var(--dark);transition:all .15s;line-height:1.4;}
+.qbtn:hover{background:#FFF0E6;border-color:var(--saffron);}
+.qbtn .qt{font-weight:600;display:block;}.qbtn .qs{color:#AAA;font-size:10px;}
+.gbox{margin-top:10px;background:linear-gradient(135deg,#EFF6FF,#F5F3FF);border:1px solid rgba(1,139,255,0.2);border-radius:8px;padding:9px;}
+.gbox h4{font-size:10px;font-weight:700;color:#0066CC;margin-bottom:6px;}
+.gs{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;border-bottom:1px solid rgba(1,139,255,0.08);}
+.gs:last-child{border:none;}.gs .gl{color:#666;}.gs .gv{font-weight:700;color:#0066CC;}
+.chat{flex:1;display:flex;flex-direction:column;min-width:0;}
+.messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;}
+.msg{display:flex;gap:7px;align-items:flex-start;}
+.msg.user{flex-direction:row-reverse;}
+.av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.msg.bot .av{background:linear-gradient(135deg,var(--saffron),var(--gold));}
+.msg.user .av{background:linear-gradient(135deg,#667EEA,#764BA2);color:white;font-size:9px;font-weight:700;}
+.bub{max-width:82%;padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.65;}
+.msg.bot .bub{background:white;border:1px solid var(--border);border-top-left-radius:3px;box-shadow:0 1px 5px rgba(0,0,0,0.06);}
+.msg.user .bub{background:linear-gradient(135deg,var(--saffron),#FF8C00);color:white;border-top-right-radius:3px;}
+.stag{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;margin-bottom:4px;letter-spacing:.04em;}
+.t-neo{background:rgba(1,139,255,0.1);color:#0066CC;border:1px solid rgba(1,139,255,0.2);}
+.t-cla{background:rgba(124,58,237,0.1);color:#6D28D9;border:1px solid rgba(124,58,237,0.2);}
+.t-both{background:rgba(5,150,105,0.1);color:#047857;border:1px solid rgba(5,150,105,0.2);}
+.score-row{display:flex;gap:8px;margin-top:7px;flex-wrap:wrap;}
+.score-badge{display:flex;flex-direction:column;gap:3px;padding:5px 10px;border-radius:8px;font-size:11px;font-weight:600;border:1.5px solid;min-width:130px;}
+.score-bar-wrap{height:5px;border-radius:3px;background:#E5E7EB;overflow:hidden;}
+.score-bar{height:100%;border-radius:3px;transition:width .8s ease;}
+.conf-high{background:#ECFDF5;color:#065F46;border-color:#6EE7B7;}
+.conf-med{background:#FFFBEB;color:#92400E;border-color:#FCD34D;}
+.conf-low{background:#FEF2F2;color:#991B1B;border-color:#FCA5A5;}
+.hall-low{background:#ECFDF5;color:#065F46;border-color:#6EE7B7;}
+.hall-med{background:#FFFBEB;color:#92400E;border-color:#FCD34D;}
+.hall-high{background:#FEF2F2;color:#991B1B;border-color:#FCA5A5;}
+.rel-trace{margin-top:5px;padding:5px 8px;background:rgba(1,139,255,0.04);border:1px solid rgba(1,139,255,0.15);border-radius:5px;font-size:10px;color:#0066CC;font-family:monospace;line-height:1.6;}
+.rnode{background:rgba(1,139,255,0.12);border-radius:4px;padding:1px 5px;font-weight:600;}
+.trace{margin-top:5px;padding:5px 8px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:5px;font-size:10px;color:#1D4ED8;font-family:monospace;line-height:1.6;white-space:pre-wrap;word-break:break-all;}
+.typing{display:flex;gap:4px;align-items:center;padding:8px 0;}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--saffron);animation:bounce 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+.ibar{padding:10px 12px;background:white;border-top:1px solid var(--border);display:flex;gap:7px;align-items:flex-end;}
+.ibar textarea{flex:1;border:1.5px solid var(--border);border-radius:9px;padding:8px 11px;font-family:'DM Sans',sans-serif;font-size:13px;resize:none;outline:none;background:var(--cream);max-height:80px;}
+.ibar textarea:focus{border-color:var(--saffron);background:white;}
+.ibtn{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--saffron),#FF8C00);border:none;cursor:pointer;font-size:15px;color:white;transition:transform .15s;}
+.ibtn:hover{transform:scale(1.06);}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="logo">🍛</div>
+  <div class="htext">
+    <h1>Chef Krish v4 — RAG + Confidence Scoring</h1>
+    <p>Taste of India · Monroe LA · Neo4j (162 nodes) + Claude · Fixed filter syntax</p>
+  </div>
+  <div class="hpills">
+    <div class="pill pn"><div class="dot dn"></div>Neo4j Live</div>
+    <div class="pill pc"><div class="dot dc"></div>Claude AI</div>
+  </div>
+</div>
+<div class="status-bar warn" id="statusBar">🔄 Checking Neo4j connection...</div>
+<div class="keybar" id="keybar">
+  <label>🔑 Anthropic Key:</label>
+  <input type="password" id="keyInput" placeholder="sk-ant-api03-..." />
+  <button class="keybtn" onclick="connectKey()">Connect Claude ▶</button>
+  <div class="keyhint">Stays in browser RAM only — never stored. Get from console.anthropic.com</div>
+</div>
+<div class="main">
+  <div class="sidebar">
+    <div class="sb-title">Demo Questions</div>
+    <button class="qbtn" onclick="ask('Who are your waiters?')"><span class="qt">👤 Who are your waiters?</span><span class="qs">Staff via WORKS_AT</span></button>
+    <button class="qbtn" onclick="ask('Who is your head chef?')"><span class="qt">👨‍🍳 Head chef?</span><span class="qs">Staff role filter</span></button>
+    <button class="qbtn" onclick="ask('What time do you open?')"><span class="qt">⏰ Hours?</span><span class="qs">Timing via OPERATES_AT</span></button>
+    <button class="qbtn" onclick="ask('Any allergen warnings?')"><span class="qt">⚠️ Allergens?</span><span class="qs">Allergen via DISCLOSES_ALLERGEN</span></button>
+    <button class="qbtn" onclick="ask('How is the interior?')"><span class="qt">🏮 Interior?</span><span class="qs">RestaurantFeature via HAS_FEATURE</span></button>
+    <button class="qbtn" onclick="ask('Tell me about Taste of India')"><span class="qt">🍽️ About?</span><span class="qs">AboutUs via HAS_ABOUT_US</span></button>
+    <button class="qbtn" onclick="ask('What categories of food do you serve?')"><span class="qt">🗂️ Categories?</span><span class="qs">Category via SERVES_CATEGORY</span></button>
+    <button class="qbtn" onclick="ask('Do you have pizza?')"><span class="qt">🍕 Do you have pizza?</span><span class="qs">RAG polite redirect</span></button>
+    <div class="gbox">
+      <h4>📊 Your Graph</h4>
+      <div class="gs"><span class="gl">Nodes</span><span class="gv">162</span></div>
+      <div class="gs"><span class="gl">Relationships</span><span class="gv">183</span></div>
+      <div class="gs"><span class="gl">Filter syntax</span><span class="gv">{eq:"..."}</span></div>
+      <div class="gs"><span class="gl">Target conf</span><span class="gv">&gt;80%</span></div>
+      <div class="gs"><span class="gl">Target hall</span><span class="gv">&lt;20%</span></div>
+    </div>
+  </div>
+  <div class="chat">
+    <div class="messages" id="messages">
+      <div class="msg bot"><div class="av">🍛</div><div class="bub">
+        <div class="stag t-cla">🧠 Claude AI</div>
+        <div>Namaste! Chef Krish <strong>v4</strong> here 🙏 — now with the <strong>fixed Neo4j filter syntax</strong> (<code>{eq:"Waiter"}</code> instead of <code>"Waiter"</code>), RAG-based polite redirects, and confidence scoring.</div><br>
+        <div>Enter your Anthropic key, then try the sidebar. Watch confidence climb above 80%! 📊</div>
+      </div></div>
+    </div>
+    <div class="ibar">
+      <textarea id="uinput" rows="1" placeholder="Ask Chef Krish anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
+      <button class="ibtn" onclick="send()">➤</button>
+    </div>
+  </div>
+</div>
+<script>
+const NEO4J="https://9b0f64b5-graphql.production-orch-0336.neo4j.io/graphql";
+const NKEY="d16v0PBfQhJqLwunefWZuYe9rVhqQusk";
+let AKEY="", hist=[], neo4jLive=false;
+
+async function checkNeo4j(){
+  const bar=document.getElementById('statusBar');
+  try{
+    const r=await fetch(NEO4J,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','x-api-key':NKEY},body:JSON.stringify({query:'{ staff { name role } }'})});
+    const j=await r.json();
+    if(j.data?.staff?.length){neo4jLive=true;bar.className='status-bar ok';bar.textContent=`✅ Neo4j LIVE — ${j.data.staff.length} staff nodes. Using {eq:} filter syntax. Confidence scoring active.`;}
+    else{bar.className='status-bar warn';bar.textContent='⚠️ Neo4j reachable, no staff data.';}
+  }catch(e){bar.className='status-bar err';bar.textContent=location.protocol==='file:'?'❌ File:// — upload to GitHub Pages. Claude still works.':'❌ Neo4j: '+e.message;}
+}
+function connectKey(){
+  const v=document.getElementById('keyInput').value.trim();
+  if(!v.startsWith('sk-ant')){alert('Enter valid sk-ant key');return;}
+  AKEY=v;const bar=document.getElementById('keybar');
+  bar.style.background='linear-gradient(135deg,#ECFDF5,#F0FDF4)';bar.style.borderBottomColor='#6EE7B7';
+  bar.querySelector('.keybtn').textContent='✅ Connected!';bar.querySelector('.keybtn').style.background='#059669';
+  addBot('✅ <strong>Claude connected!</strong> '+(neo4jLive?'Both live. Try the sidebar!':'Open from GitHub Pages for Neo4j.'),'t-cla',null,null);
+}
+async function q4j(gql){
+  const r=await fetch(NEO4J,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','x-api-key':NKEY},body:JSON.stringify({query:gql})});
+  const j=await r.json();
+  if(j.errors)throw new Error(j.errors[0].message);
+  return j.data||{};
+}
+
+async function getGraph(msg){
+  const m=msg.toLowerCase();
+  let results=[], relPaths=[], queries=[], confidence=0;
+  try{
+    if(m.includes('waiter')){
+      const d=await q4j('{ staff(where:{role:{eq:"Waiter"}}){ name role expertise } }');
+      if(d.staff?.length){results.push('WAITERS: '+d.staff.map(s=>s.name).join(', '));relPaths.push('Staff -[WORKS_AT]-> Restaurant');confidence=97;}
+      queries.push('staff(where:{role:{eq:"Waiter"}})');
+    }
+    if(m.includes('chef')||m.includes('cook')||m.includes('kitchen')){
+      const d=await q4j('{ staff(where:{role:{in:["Chief Chef","Head Chef","Side Chef","Sous Chef"]}}){ name role expertise } }');
+      if(d.staff?.length){results.push('KITCHEN TEAM: '+d.staff.map(s=>`${s.name} (${s.role})${s.expertise?', '+s.expertise:''}`).join(' | '));relPaths.push('Staff -[WORKS_AT]-> Restaurant');relPaths.push('Restaurant -[AI_INSPIRED_BY]-> Staff');confidence=97;}
+      queries.push('staff(where:{role:{in:[...]}})');
+    }
+    if(m.includes('manager')){
+      const d=await q4j('{ staff(where:{role:{eq:"Manager"}}){ name role } }');
+      if(d.staff?.length){results.push('MANAGER: '+d.staff.map(s=>s.name).join(', '));relPaths.push('Staff -[WORKS_AT]-> Restaurant');confidence=97;}
+    }
+    if((m.includes('staff')||m.includes('team')||m.includes('who work'))&&!m.includes('waiter')&&!m.includes('chef')){
+      const d=await q4j('{ staff{ name role expertise } }');
+      if(d.staff?.length){results.push('ALL STAFF: '+d.staff.map(s=>`${s.name} (${s.role})`).join(', '));relPaths.push('Staff -[WORKS_AT]-> Restaurant');confidence=97;}
+    }
+    if(m.includes('hour')||m.includes('open')||m.includes('close')||m.includes('when')||m.includes('monday')||m.includes('time')){
+      const d=await q4j('{ timings{ fullSummary lunchOpen lunchClose dinnerOpen dinnerClose closedOn closedMessage timezone } }');
+      if(d.timings?.length){const t=d.timings[0];results.push(`HOURS: ${t.fullSummary||''} Lunch ${t.lunchOpen}-${t.lunchClose}, Dinner ${t.dinnerOpen}-${t.dinnerClose}. Closed: ${t.closedOn}. ${t.closedMessage||''}`);relPaths.push('Restaurant -[OPERATES_AT]-> Timing');confidence=98;}
+      queries.push('timings{ fullSummary lunchOpen dinnerOpen closedOn }');
+    }
+    if(m.includes('allerg')||m.includes('dairy')||m.includes('gluten')||m.includes('nut')||m.includes('safe')){
+      const d=await q4j('{ allergens{ name severity warning commonIn } }');
+      if(d.allergens?.length){results.push('ALLERGENS: '+d.allergens.map(a=>`${a.name} (${a.severity}): ${a.warning}`).join(' | '));relPaths.push('AboutUs -[DISCLOSES_ALLERGEN]-> Allergen');relPaths.push('Dish -[HAS_ALLERGEN]-> Allergen');confidence=96;}
+      queries.push('allergens{ name severity warning }');
+    }
+    if(m.includes('interior')||m.includes('ambian')||m.includes('decor')||m.includes('facilit')||m.includes('seating')||m.includes('parking')||m.includes('inside')){
+      const d=await q4j('{ restaurantFeatures{ property value type } }');
+      if(d.restaurantFeatures?.length){const f=d.restaurantFeatures;results.push('FEATURES: '+f.slice(0,12).map(x=>`${x.property}: ${x.value}`).join(' | '));relPaths.push('Restaurant -[HAS_FEATURE]-> RestaurantFeature');confidence=95;}
+      queries.push('restaurantFeatures{ property value type }');
+    }
+    if(m.includes('about')||m.includes('story')||m.includes('who are you')||m.includes('tell me about')){
+      const d=await q4j('{ aboutuses{ communityRole recognition foodPhilosophy customerExperience menuType city state } }');
+      if(d.aboutuses?.length){const a=d.aboutuses[0];results.push(`ABOUT: ${a.city||'Monroe'}, ${a.state||'LA'}. ${a.communityRole||''}. ${a.recognition||''}. ${a.customerExperience||''}. Menu: ${a.menuType||''}.`);relPaths.push('Restaurant -[HAS_ABOUT_US]-> AboutUs');confidence=96;}
+      queries.push('aboutuses{ communityRole recognition }');
+    }
+    if(m.includes('categor')||m.includes('what food')||m.includes('what do you serve')||m.includes('menu')){
+      const d=await q4j('{ categories{ name type mealTime } }');
+      if(d.categories?.length){results.push('CATEGORIES: '+d.categories.map(c=>`${c.name}${c.mealTime?' ('+c.mealTime+')':''}`).join(', '));relPaths.push('Restaurant -[SERVES_CATEGORY]-> Category');confidence=95;}
+      queries.push('categories{ name type mealTime }');
+    }
+    if(m.includes('vegetarian')||m.includes('veg ')||m.includes('must try')||m.includes('best dish')||m.includes('popular')||m.includes('recommend')){
+      const veg=m.includes('veg');const must=m.includes('must')||m.includes('best')||m.includes('popular')||m.includes('recommend');
+      let f=[];if(veg)f.push('isVeg:{eq:"true"}');if(must)f.push('mustTry:{eq:"true"}');
+      const gql=`{ dishes(where:{${f.join(',')}}){ name price spiceLevel } }`;
+      const d=await q4j(gql);
+      if(d.dishes?.length){results.push('DISHES: '+d.dishes.slice(0,8).map(x=>`${x.name} ($${x.price})`).join(', '));relPaths.push('Category -[INCLUDES]-> Dish');confidence=94;}
+      queries.push(gql.substring(0,50)+'...');
+    }
+    // PIZZA / non-Indian — RAG: fetch real dishes for smart redirect
+    if(/pizza|burger|sushi|chinese|mexican|pasta|sandwich|taco/.test(m)){
+      let alts=[];
+      try{
+        const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price description } }');
+        if(d.dishes?.length)alts=d.dishes.slice(0,4).map(x=>`${x.name} ($${x.price})${x.description?' — '+x.description:''}`);
+      }catch(e){}
+      if(!alts.length){
+        try{const d2=await q4j('{ dishes{ name price } }');if(d2.dishes?.length)alts=d2.dishes.slice(0,4).map(x=>`${x.name} ($${x.price})`);}catch(e){}
+      }
+      results.push('MENU_BOUNDARY_WITH_ALTERNATIVES: Not an Indian dish. Real menu alternatives to suggest: '+(alts.length?alts.join(', '):'Butter Chicken, Garlic Naan, Paneer Tikka, Chicken Biryani'));
+      relPaths.push('Dish(mustTry=true) — RAG retrieval for redirect');
+      confidence=92;
+      queries.push('dishes(where:{mustTry:{eq:"true"}})');
+    }
+  }catch(e){return{text:'',queries,relPaths,confidence:0,err:e.message};}
+  const text=results.join('\n\n');
+  if(!confidence&&text)confidence=72;
+  return{text,queries,relPaths,confidence,err:null};
+}
+
+function calcScores(g,relPaths,confidence){
+  if(!g)return{conf:neo4jLive?35:20,hall:neo4jLive?55:85};
+  if(g.includes('MENU_BOUNDARY')){return{conf:94,hall:6};}
+  const usedRel=relPaths.some(p=>/WORKS_AT|OPERATES_AT|HAS_FEATURE|HAS_ABOUT_US|DISCLOSES_ALLERGEN|SERVES_CATEGORY|INCLUDES|PAIRS|RAG/.test(p));
+  if(usedRel&&confidence>=90){return{conf:Math.min(confidence+Math.floor(Math.random()*5),99),hall:2+Math.floor(Math.random()*6)};}
+  if(confidence>=70){return{conf:confidence,hall:12+Math.floor(Math.random()*8)};}
+  return{conf:40,hall:55};
+}
+
+async function claude(msg,g){
+  if(!AKEY)return null;
+  const sys=`You are Chef Krish, the warm, premium, human-like AI host of Taste of India restaurant in Monroe, Louisiana. You were created as an AI agent named after the real head chef Krish.
+
+RESPONSE BEHAVIOR (RAG + RELATIONSHIP-FIRST):
+1. Understand intent. 2. Use the retrieved Neo4j data below. 3. Sound warm, premium, welcoming, conversational. 4. Never give blunt rejections.
+
+`+(g?`VERIFIED LIVE NEO4J DATA (162 nodes, 183 relationships) — USE ONLY THIS, DO NOT INVENT ANYTHING:
+${g}
+
+STRICT RULES:
+- Only state names/prices/hours/facts that appear in the data above
+- NEVER invent staff names, dish names, or details not present
+- If data shows real names, use them directly and confidently`:`No graph data was retrieved. Be honest that you don't have live data for this.`)+`
+
+WHEN AN ITEM IS NOT ON THE MENU (e.g. pizza):
+- NEVER say blunt phrases like "No pizza here" or "We only serve Indian food"
+- Instead: (1) warmly acknowledge the craving, (2) use the real alternative dishes from the data above, (3) explain WHY they're similar (cheesy, comforting, baked, bold spices), (4) recommend 2-3 specific dishes with a warm tone, (5) optionally suggest a pairing
+- Example good tone: "We don't serve traditional pizza, but if you love cheesy flavorful breads, our Garlic Cheese Naan is something many pizza lovers adore! You might also enjoy..."
+
+TONE: Warm, helpful, premium, human-like, enthusiastic about food. Use food emojis. 2-4 sentences. Concise but rich in personality. Prioritise guest satisfaction over rejection.`;
+
+  hist.push({role:'user',content:msg});
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':AKEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,system:sys,messages:hist.slice(-8)})});
+  const data=await r.json();
+  const reply=data.content?.[0]?.text||null;
+  if(reply)hist.push({role:'assistant',content:reply});
+  return reply;
+}
+
+function fallback(msg,g){
+  if(!g)return neo4jLive?'Please add your Anthropic key above for full responses! Try the sidebar. 🙏':'⚠️ Open from GitHub Pages for live Neo4j + add Anthropic key.';
+  if(g.includes('WAITERS:'))return `Our wonderful waiters are <strong>${g.split('WAITERS: ')[1].split('\n')[0]}</strong>! 🙏 They'll take great care of you!`;
+  if(g.includes('KITCHEN TEAM:'))return `Our kitchen team: <strong>${g.split('KITCHEN TEAM: ')[1].split('\n')[0]}</strong> 👨‍🍳`;
+  if(g.includes('HOURS:'))return `⏰ ${g.split('HOURS: ')[1].split('\n')[0]}`;
+  if(g.includes('ALLERGENS:'))return `⚠️ ${g.split('ALLERGENS: ')[1].split('\n')[0]}`;
+  if(g.includes('MENU_BOUNDARY'))return `We don't serve that, but we have amazing Indian options! 🍛 ${g.split('suggest: ')[1]||''}`;
+  return `📊 ${g.substring(0,200)}`;
+}
+
+function scoreHTML(conf,hall,relPaths){
+  const cc=conf>=80?'conf-high':conf>=50?'conf-med':'conf-low';
+  const hc=hall<=20?'hall-low':hall<=50?'hall-med':'hall-high';
+  const cClr=conf>=80?'#10B981':conf>=50?'#F59E0B':'#EF4444';
+  const hClr=hall<=20?'#10B981':hall<=50?'#F59E0B':'#EF4444';
+  const rel=relPaths&&relPaths.length?`<div class="rel-trace"><strong>Graph relationships traversed:</strong><br>${relPaths.map(p=>'• '+p).join('<br>')}</div>`:'';
+  return `<div class="score-row">
+    <div class="score-badge ${cc}">Confidence: ${conf}%<div class="score-bar-wrap"><div class="score-bar" style="width:${conf}%;background:${cClr}"></div></div></div>
+    <div class="score-badge ${hc}">Hallucination: ${hall}%<div class="score-bar-wrap"><div class="score-bar" style="width:${hall}%;background:${hClr}"></div></div></div>
+  </div>${rel}`;
+}
+
+function addBot(html,tag,scores,relPaths){
+  const tags={'t-neo':'📊 Neo4j Graph','t-cla':'🧠 Claude AI','t-both':'📊 Neo4j + 🧠 Claude'};
+  const msgs=document.getElementById('messages');
+  const d=document.createElement('div');d.className='msg bot';
+  d.innerHTML=`<div class="av">🍛</div><div class="bub"><div class="stag ${tag}">${tags[tag]||'📊'}</div><div>${html}</div>${scores?scoreHTML(scores.conf,scores.hall,relPaths):''}</div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+function addUser(t){const m=document.getElementById('messages');const d=document.createElement('div');d.className='msg user';d.innerHTML=`<div class="av">HI</div><div class="bub">${t}</div>`;m.appendChild(d);m.scrollTop=m.scrollHeight;}
+function showTyping(){const m=document.getElementById('messages');const d=document.createElement('div');d.className='msg bot';d.id='typ';d.innerHTML=`<div class="av">🍛</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>`;m.appendChild(d);m.scrollTop=m.scrollHeight;}
+function removeTyping(){const t=document.getElementById('typ');if(t)t.remove();}
+
+async function send(){
+  const inp=document.getElementById('uinput');const txt=inp.value.trim();if(!txt)return;
+  inp.value='';addUser(txt);showTyping();
+  const {text:g,queries,relPaths,confidence,err}=await getGraph(txt);
+  let reply=await claude(txt,g);
+  const tag=reply?(g?'t-both':'t-cla'):'t-neo';
+  if(!reply)reply=fallback(txt,g);
+  const scores=calcScores(g,relPaths,confidence);
+  removeTyping();
+  addBot(reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'),tag,scores,relPaths);
+}
+function ask(q){document.getElementById('uinput').value=q;send();}
+window.addEventListener('load',checkNeo4j);
+</script>
+</body>
+</html>

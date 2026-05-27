@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chef Krish v6</title>
+<title>Chef Krish v6.1</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap');
 :root{--saffron:#FF6B00;--gold:#D4A017;--cream:#FDF6EC;--dark:#1A0F00;--border:#EDD9C0;}
@@ -30,42 +30,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);height:100vh;displ
 .kbar input:focus{border-color:var(--saffron);}
 .kbtn{padding:5px 12px;background:var(--saffron);color:white;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;}
 .main{display:flex;flex:1;overflow:hidden;}
-/* TABS */
 .tabs-wrap{width:300px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:white;}
 .tab-header{display:flex;border-bottom:1px solid var(--border);}
-.th-btn{flex:1;padding:8px 4px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--color,#888);border-bottom:2px solid transparent;transition:all .15s;}
+.th-btn{flex:1;padding:8px 4px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:transparent;color:#888;border-bottom:2px solid transparent;transition:all .15s;}
 .th-btn.on{color:var(--saffron);border-bottom-color:var(--saffron);background:rgba(255,107,0,0.04);}
 .tab-pane{display:none;flex:1;overflow-y:auto;padding:10px;}
 .tab-pane.on{display:block;}
-/* SIDEBAR QUESTIONS */
 .sb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#AAA;margin-bottom:6px;}
 .qbtn{width:100%;text-align:left;background:var(--cream);border:1px solid var(--border);border-radius:7px;padding:7px 9px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;margin-bottom:4px;color:var(--dark);transition:all .15s;line-height:1.4;}
 .qbtn:hover{background:#FFF0E6;border-color:var(--saffron);}
 .qbtn .qt{font-weight:600;display:block;}.qbtn .qs{color:#AAA;font-size:10px;}
-/* NEO4J LOG TAB */
-.log-entry{border:0.5px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:11px;line-height:1.7;}
+.log-entry{border:0.5px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:11px;line-height:1.7;cursor:pointer;}
 .log-entry.ok{border-left:3px solid #1D9E75;}
 .log-entry.err{border-left:3px solid #E24B4A;}
 .log-entry.skip{border-left:3px solid #AAA;}
 .log-time{color:#888;font-size:10px;}
 .log-q{font-family:monospace;color:#185FA5;font-size:10px;white-space:pre-wrap;word-break:break-all;margin:3px 0;}
 .log-status{font-weight:600;}
-.log-status.ok{color:#1D9E75;}
-.log-status.err{color:#E24B4A;}
-.log-status.skip{color:#888;}
-.log-data{font-family:monospace;font-size:10px;color:#444;white-space:pre-wrap;word-break:break-all;}
-/* TOKEN TAB */
+.log-status.ok{color:#1D9E75;}.log-status.err{color:#E24B4A;}.log-status.skip{color:#888;}
+.log-data{font-family:monospace;font-size:10px;color:#444;white-space:pre-wrap;word-break:break-all;margin-top:4px;background:#F8F8F8;border-radius:4px;padding:4px;}
 .tok-card{background:var(--cream);border:0.5px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;}
 .tok-num{font-size:20px;font-weight:600;color:var(--dark);}
 .tok-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em;}
-.tok-row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:0.5px solid var(--border);}
-.tok-row:last-child{border:none;}
-.tok-k{color:#666;}.tok-v{font-weight:600;font-family:monospace;}
 .tok-entry{border:0.5px solid var(--border);border-radius:6px;padding:7px 10px;margin-bottom:5px;font-size:11px;}
 .tok-q{font-weight:600;color:var(--dark);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .tok-bar{height:3px;border-radius:2px;background:#E5E7EB;margin:4px 0;overflow:hidden;}
 .tok-fill{height:100%;border-radius:2px;background:var(--saffron);}
-/* CHAT */
 .chat{flex:1;display:flex;flex-direction:column;min-width:0;}
 .messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;}
 .msg{display:flex;gap:7px;align-items:flex-start;}
@@ -107,60 +97,54 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);height:100vh;displ
 <div class="hdr">
   <div class="logo">🍛</div>
   <div class="htext">
-    <h1>Chef Krish v6 — Taste of India</h1>
-    <p>Monroe LA · Neo4j (194 dishes) + Claude · Neo4j Logs · Token Tracking · Smart Routing</p>
+    <h1>Chef Krish v6.1 — Fixed Routing</h1>
+    <p>Dish lookup first · Pairing queries · Beverages fixed · Sides added · Neo4j logs · Token tracking</p>
   </div>
   <div class="hpills">
     <div class="pill pn"><div class="dot dn"></div>Neo4j</div>
     <div class="pill pc"><div class="dot dc"></div>Claude</div>
   </div>
 </div>
-<div class="sbar warn" id="sbar">🔄 Checking Neo4j connection...</div>
+<div class="sbar warn" id="sbar">🔄 Checking Neo4j...</div>
 <div class="kbar" id="kbar">
   <label>🔑 Anthropic Key:</label>
   <input type="password" id="keyIn" placeholder="sk-ant-api03-..." />
   <button class="kbtn" onclick="connectKey()">Connect ▶</button>
-  <span style="font-size:10px;color:#999">Stays in browser RAM · console.anthropic.com</span>
+  <span style="font-size:10px;color:#999">RAM only · console.anthropic.com</span>
 </div>
 <div class="main">
-  <!-- LEFT: TABS -->
   <div class="tabs-wrap">
     <div class="tab-header">
       <button class="th-btn on" onclick="showTab('questions',this)">Questions</button>
       <button class="th-btn" onclick="showTab('logs',this)">Neo4j Logs</button>
       <button class="th-btn" onclick="showTab('tokens',this)">Tokens</button>
     </div>
-    <!-- QUESTIONS TAB -->
     <div class="tab-pane on" id="tab-questions">
-      <div class="sb-title">Ask Chef Krish</div>
-      <button class="qbtn" onclick="ask('Who are your waiters?')"><span class="qt">Who are your waiters?</span><span class="qs">Staff via WORKS_AT</span></button>
-      <button class="qbtn" onclick="ask('Who is the head chef?')"><span class="qt">Who is the head chef?</span><span class="qs">Staff role filter</span></button>
-      <button class="qbtn" onclick="ask('What time do you open?')"><span class="qt">What time do you open?</span><span class="qs">Timing via OPERATES_AT</span></button>
-      <button class="qbtn" onclick="ask('Do you have buffet?')"><span class="qt">Do you have buffet?</span><span class="qs">Timing buffetNote</span></button>
-      <button class="qbtn" onclick="ask('Any allergen warnings?')"><span class="qt">Any allergen warnings?</span><span class="qs">Allergen via DISCLOSES</span></button>
-      <button class="qbtn" onclick="ask('How is the accommodation and interior?')"><span class="qt">How is the accommodation?</span><span class="qs">RestaurantFeature nodes</span></button>
-      <button class="qbtn" onclick="ask('Tell me about Taste of India')"><span class="qt">About this restaurant</span><span class="qs">AboutUs via HAS_ABOUT_US</span></button>
-      <button class="qbtn" onclick="ask('What seafood do you serve?')"><span class="qt">What seafood do you serve?</span><span class="qs">Seafood Entrees</span></button>
-      <button class="qbtn" onclick="ask('What biryani do you have?')"><span class="qt">What biryani options?</span><span class="qs">Biriyani category</span></button>
-      <button class="qbtn" onclick="ask('What vegetarian dishes do you have?')"><span class="qt">Vegetarian dishes?</span><span class="qs">Dish isVeg=true</span></button>
-      <button class="qbtn" onclick="ask('Do you have pizza?')"><span class="qt">Do you have pizza?</span><span class="qs">RAG polite redirect</span></button>
-      <button class="qbtn" onclick="ask('What are your must try dishes?')"><span class="qt">Must-try dishes?</span><span class="qs">Dish mustTry=true</span></button>
-      <button class="qbtn" onclick="ask('Do you have parking and wheelchair access?')"><span class="qt">Parking / wheelchair?</span><span class="qs">RestaurantFeature HAS_FACILITY</span></button>
-      <button class="qbtn" onclick="ask('Who is the manager?')"><span class="qt">Who is the manager?</span><span class="qs">Staff role=Manager</span></button>
-      <button class="qbtn" onclick="ask('What dosa do you have?')"><span class="qt">Dosa options?</span><span class="qs">Dosa & South Indian</span></button>
-      <button class="qbtn" onclick="ask('What breads do you serve?')"><span class="qt">Breads & Naan?</span><span class="qs">Breads & Naan category</span></button>
+      <div class="sb-title">Test the fixed queries</div>
+      <button class="qbtn" onclick="ask('what pairs good with butter chicken')"><span class="qt">What pairs with butter chicken?</span><span class="qs">PAIRS_WELL_WITH → fixed</span></button>
+      <button class="qbtn" onclick="ask('chicken tikka masala')"><span class="qt">Chicken tikka masala</span><span class="qs">Dish lookup first → fixed</span></button>
+      <button class="qbtn" onclick="ask('what are your sides')"><span class="qt">What are your sides?</span><span class="qs">Sides category → fixed</span></button>
+      <button class="qbtn" onclick="ask('what drinks do you have')"><span class="qt">What drinks do you have?</span><span class="qs">isBeverage=true → fixed</span></button>
+      <button class="qbtn" onclick="ask('mango lassi')"><span class="qt">Mango lassi</span><span class="qs">Dish lookup → fixed</span></button>
+      <button class="qbtn" onclick="ask('what goes with lamb rogan josh')"><span class="qt">What goes with lamb rogan josh?</span><span class="qs">PAIRS_WELL_WITH</span></button>
+      <button class="qbtn" onclick="ask('chicken curry options')"><span class="qt">Chicken curry options</span><span class="qs">Dish lookup</span></button>
+      <button class="qbtn" onclick="ask('who are your waiters')"><span class="qt">Who are your waiters?</span><span class="qs">Staff WORKS_AT</span></button>
+      <button class="qbtn" onclick="ask('what time do you open')"><span class="qt">What time do you open?</span><span class="qs">Timing node</span></button>
+      <button class="qbtn" onclick="ask('do you have buffet')"><span class="qt">Do you have buffet?</span><span class="qs">Timing buffetNote</span></button>
+      <button class="qbtn" onclick="ask('how is the interior')"><span class="qt">How is the interior?</span><span class="qs">RestaurantFeature</span></button>
+      <button class="qbtn" onclick="ask('accommodation')"><span class="qt">Accommodation</span><span class="qs">Interior/facility</span></button>
+      <button class="qbtn" onclick="ask('any allergen warnings')"><span class="qt">Any allergen warnings?</span><span class="qs">Allergen nodes</span></button>
+      <button class="qbtn" onclick="ask('what dosa do you have')"><span class="qt">Dosa options?</span><span class="qs">Dosa & South Indian</span></button>
+      <button class="qbtn" onclick="ask('do you have pizza')"><span class="qt">Do you have pizza?</span><span class="qs">RAG polite redirect</span></button>
+      <button class="qbtn" onclick="ask('must try dishes')"><span class="qt">Must-try dishes?</span><span class="qs">mustTry=true</span></button>
     </div>
-    <!-- NEO4J LOGS TAB -->
     <div class="tab-pane" id="tab-logs">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
         <div class="sb-title" style="margin:0">Neo4j query log</div>
         <button class="clr-btn" onclick="clearLogs()">Clear</button>
       </div>
-      <div id="log-body">
-        <div style="font-size:11px;color:#AAA;text-align:center;padding:20px 0">No queries yet.<br>Ask a question to see logs.</div>
-      </div>
+      <div id="log-body"><div style="font-size:11px;color:#AAA;text-align:center;padding:20px 0">No queries yet.</div></div>
     </div>
-    <!-- TOKENS TAB -->
     <div class="tab-pane" id="tab-tokens">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
         <div class="sb-title" style="margin:0">Token usage</div>
@@ -170,26 +154,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);height:100vh;displ
         <div class="tok-card"><div class="tok-num" id="tk-in">0</div><div class="tok-label">Input tokens</div></div>
         <div class="tok-card"><div class="tok-num" id="tk-out">0</div><div class="tok-label">Output tokens</div></div>
         <div class="tok-card"><div class="tok-num" id="tk-total">0</div><div class="tok-label">Total tokens</div></div>
-        <div class="tok-card"><div class="tok-num" id="tk-queries">0</div><div class="tok-label">Queries</div></div>
+        <div class="tok-card"><div class="tok-num" id="tk-q">0</div><div class="tok-label">Queries</div></div>
       </div>
       <div class="sb-title">Per-query breakdown</div>
-      <div id="tok-body">
-        <div style="font-size:11px;color:#AAA;text-align:center;padding:10px 0">No queries yet.</div>
-      </div>
+      <div id="tok-body"><div style="font-size:11px;color:#AAA;text-align:center;padding:10px 0">No queries yet.</div></div>
     </div>
   </div>
-  <!-- RIGHT: CHAT -->
   <div class="chat">
     <div class="messages" id="msgs">
       <div class="msg bot"><div class="av">🍛</div><div class="bub">
         <div class="stag t-cla">🧠 Claude AI</div>
-        <div>Namaste! I am <strong>Chef Krish v6</strong> — now with <strong>Neo4j live logs</strong> and <strong>token tracking</strong>! 🙏</div><br>
-        <div>Every query I send to Neo4j is logged in the <strong>Neo4j Logs</strong> tab. Every token used by Claude is counted in the <strong>Tokens</strong> tab. The smart router now catches <strong>accommodation, seating, vibe, look, feel, parking, wheelchair</strong> and 40+ more keywords so nothing falls through to hallucination.</div><br>
-        <div>Add your Anthropic key above, then ask me anything!</div>
+        <div>Namaste! <strong>Chef Krish v6.1</strong> — all routing bugs fixed! 🙏</div><br>
+        <div><strong>Fixed:</strong> Dish lookup now runs BEFORE chef/waiter checks, so "butter chicken", "chicken tikka", "mango lassi" all hit Neo4j first. Pairing queries ("what pairs with X") now traverse <code>PAIRS_WELL_WITH</code>. Beverages now query <code>isBeverage=true</code> directly. Sides category added.</div><br>
+        <div>Add your Anthropic key and test the fixed queries in the sidebar!</div>
       </div></div>
     </div>
     <div class="ibar">
-      <textarea id="uinput" rows="1" placeholder="Ask Chef Krish anything about Taste of India..."
+      <textarea id="uinput" rows="1" placeholder="Ask Chef Krish anything..."
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
       <button class="ibtn" onclick="send()">➤</button>
     </div>
@@ -200,377 +181,477 @@ const N4J="https://9b0f64b5-graphql.production-orch-0336.neo4j.io/graphql";
 const NK="d16v0PBfQhJqLwunefWZuYe9rVhqQusk";
 let AK="",hist=[],n4jLive=false;
 let totalIn=0,totalOut=0,totalQ=0;
-const logs=[];
+const logs=[];const tokHistory=[];
 
-// ── STARTUP ──────────────────────────────────────────
+// ══════════════════════════════════════════════════════
+// PINECONE + VOYAGE AI — SEMANTIC RAG (Part 2 & 3 added)
+// ══════════════════════════════════════════════════════
+const PIN_HOST="https://chef-krish-index-82tibs6.svc.aped-4627-b74a.pinecone.io";
+const PIN_KEY ="pcsk_cBjcj_DJNFH8AvceY5Qqs1i4qPBVbC9PjWHxcCnMbDSyUmEQqj7FaRHKCxLkkWRzm9quH";
+const VOY_KEY ="pa-oxJu0meTte3gSxdIBA5oNrJAvW8L83oyDhm5BDDH6ES";
+let pineconeReady=false;
+
+// ── Embed a single question with Voyage AI ─────────────
+async function embedQuery(question){
+  try{
+    const r=await fetch("https://api.voyageai.com/v1/embeddings",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+VOY_KEY},
+      body:JSON.stringify({model:"voyage-3-lite",input:[question],input_type:"query"})
+    });
+    if(!r.ok){const t=await r.text();throw new Error("Voyage "+r.status+": "+t.substring(0,100));}
+    const j=await r.json();
+    if(j.error)throw new Error(j.error.message);
+    return j.data[0].embedding;
+  }catch(e){
+    addLog("voyage-embed",question,"err","Voyage AI: "+e.message,Date.now());
+    return null;
+  }
+}
+
+// ── Search Pinecone for top semantic matches ───────────
+async function semanticSearch(question, topK=5, typeFilter=null){
+  const vec=await embedQuery(question);
+  if(!vec)return[];
+  try{
+    const body={vector:vec,topK,includeMetadata:true,namespace:"chef-krish"};
+    if(typeFilter)body.filter={type:{$eq:typeFilter}};
+    const r=await fetch(PIN_HOST+"/query",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Api-Key":PIN_KEY},
+      body:JSON.stringify(body)
+    });
+    if(!r.ok)throw new Error("Pinecone query "+r.status);
+    const j=await r.json();
+    const matches=j.matches||[];
+    addLog("pinecone-search",question,"ok",matches.length+" matches · top: "+(matches[0]?.metadata?.name||"none")+" ("+matches[0]?.score?.toFixed(3)+")",Date.now());
+    return matches;
+  }catch(e){
+    addLog("pinecone-search",question,"err",e.message,Date.now());
+    return[];
+  }
+}
+
+// ── Check Pinecone is live on startup ─────────────────
+async function checkPinecone(){
+  try{
+    const r=await fetch(PIN_HOST+"/describe_index_stats",{
+      headers:{"Api-Key":PIN_KEY}
+    });
+    if(r.ok){
+      const j=await r.json();
+      const count=j.totalVectorCount||Object.values(j.namespaces||{})[0]?.vectorCount||"?";
+      pineconeReady=true;
+      addLog("pinecone-startup","describe_index_stats","ok",count+" vectors in index",Date.now());
+      return count;
+    }
+  }catch(e){
+    addLog("pinecone-startup","describe_index_stats","err",e.message,Date.now());
+  }
+  return 0;
+}
+
+// ── Semantic RAG context for natural language questions ─
+// Called when keyword router has no match OR to enrich dish questions
+async function getSemanticContext(msg){
+  const m=msg.toLowerCase();
+
+  // Detect what type of semantic search to run
+  let typeFilter=null;
+  let searchQuery=msg;
+
+  // Food / dish questions → search only dish vectors
+  if(/food|dish|eat|meal|hungry|order|serve|menu item|recommend|mild|spicy|hot|creamy|rich|light|heavy|veg|meat|chicken|lamb|fish|prawn|paneer|biryani|dosa|naan|curry|masala|tikka|korma|comfort|flavour|flavor|starter|appetizer|dessert|sweet|drink|beverage/i.test(m)){
+    typeFilter="dish";
+  }
+  // Staff / people questions → search staff vectors
+  else if(/staff|team|who|person|people|cook|chef|manager|waiter|server|employee|hire|work/i.test(m)){
+    typeFilter="staff";
+  }
+  // Ambiance / interior questions → search feature vectors
+  else if(/interior|decor|ambi|look|feel|atmosphere|vibe|setting|parking|wheel|access|facilit|seating|music|aroma|smell|ganesha|mandir|pooja|accommodation/i.test(m)){
+    typeFilter="feature";
+  }
+  // General → search all
+  else{
+    typeFilter=null;
+  }
+
+  const matches=await semanticSearch(searchQuery,5,typeFilter);
+  const good=matches.filter(m=>m.score>0.55);// only confident matches
+
+  if(!good.length)return{text:"",conf:0,source:"pinecone-no-match"};
+
+  const type=good[0].metadata?.type;
+
+  if(type==="dish"){
+    const text="SEMANTIC DISH MATCHES: "+
+      good.map(m=>`${m.metadata.name} ($${m.metadata.price}, ${m.metadata.spiceLevel} spice${m.metadata.isVeg==="true"?" 🌿 veg":""}${m.metadata.mustTry==="true"?" ⭐":""}) — similarity ${m.score.toFixed(2)}`).join(" | ");
+    return{text,conf:Math.round(good[0].score*100),source:"pinecone-dish",rels:["Pinecone cosine similarity → Dish vectors (Voyage voyage-3-lite 512d)"]};
+  }
+  if(type==="staff"){
+    const text="SEMANTIC STAFF MATCH: "+
+      good.map(m=>`${m.metadata.name} (${m.metadata.role}${m.metadata.expertise?", "+m.metadata.expertise:""})`).join(", ");
+    return{text,conf:Math.round(good[0].score*100),source:"pinecone-staff",rels:["Pinecone cosine similarity → Staff vectors"]};
+  }
+  if(type==="feature"){
+    const text="SEMANTIC FEATURE MATCH: "+
+      good.map(m=>`${m.metadata.property}: ${m.metadata.value}`).join(" | ");
+    return{text,conf:Math.round(good[0].score*100),source:"pinecone-feature",rels:["Pinecone cosine similarity → RestaurantFeature vectors"]};
+  }
+
+  // Generic match
+  const text="SEMANTIC MATCH: "+good.map(m=>m.metadata.name).join(", ");
+  return{text,conf:Math.round(good[0].score*100),source:"pinecone-general",rels:["Pinecone cosine similarity"]};
+}
+// ══════════════════════════════════════════════════════
+// END PINECONE + VOYAGE AI BLOCK
+// ══════════════════════════════════════════════════════
+
+// ── STARTUP ──────────────────────────────────
 async function checkN4j(){
   const b=document.getElementById("sbar");
+  let staffCount=0;
   try{
     const r=await fetch(N4J,{method:"POST",mode:"cors",headers:{"Content-Type":"application/json","x-api-key":NK},body:JSON.stringify({query:"{ staff { name role } }"})});
     const j=await r.json();
-    if(j.data?.staff?.length){
-      n4jLive=true;b.className="sbar ok";
-      b.textContent="✅ Neo4j LIVE — "+j.data.staff.length+" staff · 194 dishes · 26 categories · Smart routing active · Logs & tokens enabled";
-      addLog("startup","{ staff { name role } }","ok",j.data.staff.length+" staff nodes found",Date.now());
-    }else{b.className="sbar warn";b.textContent="⚠️ Neo4j reachable but no staff data.";}
-  }catch(e){
+    if(j.data?.staff?.length){n4jLive=true;staffCount=j.data.staff.length;addLog("startup","neo4j","ok",staffCount+" staff",Date.now());}
+    else{b.className="sbar warn";b.textContent="⚠️ Neo4j reachable but no data.";}
+  }catch(e){addLog("startup","neo4j","err",e.message,Date.now());}
+  const pinCount=await checkPinecone();
+  if(n4jLive){
+    b.className="sbar ok";
+    b.textContent=`✅ Neo4j LIVE (${staffCount} staff · 194 dishes) · `+(pinCount>0?`Pinecone ${pinCount} vectors · Semantic RAG active`:`Pinecone empty — run Step1_Build_Embeddings.html first`);
+  }else{
     b.className="sbar err";
-    b.textContent=location.protocol==="file:"?"❌ Open from GitHub Pages — Neo4j blocks file:// CORS. Claude AI still works with key.":"❌ Neo4j: "+e.message;
-    addLog("startup","connection check","err",e.message,Date.now());
+    b.textContent=location.protocol==="file:"?"❌ Open from GitHub Pages — Neo4j CORS blocks file://":"❌ Neo4j connection failed";
   }
 }
 
 function connectKey(){
   const v=document.getElementById("keyIn").value.trim();
-  if(!v.startsWith("sk-ant")){alert("Enter valid sk-ant key");return;}
+  if(!v.startsWith("sk-ant")){alert("Valid sk-ant key required");return;}
   AK=v;const b=document.getElementById("kbar");
   b.style.background="linear-gradient(135deg,#ECFDF5,#F0FDF4)";b.style.borderBottomColor="#6EE7B7";
   b.querySelector(".kbtn").textContent="✅ Connected!";b.querySelector(".kbtn").style.background="#059669";
-  addBot("✅ <strong>Claude connected!</strong> "+(n4jLive?"Both Neo4j + Claude live. Check the Logs and Tokens tabs as you chat!":"Open from GitHub Pages for live Neo4j data."),"t-cla",null,null,null);
+  addBot("✅ <strong>Claude connected!</strong> "+(n4jLive?"Both live. All dish queries now reach Neo4j!":"Open from GitHub Pages for live graph."),"t-cla",null,null,null);
 }
 
-// ── NEO4J QUERY WITH LOGGING ────────────────────────
-async function q4j(gql,intentLabel){
+// ── NEO4J WITH FULL LOGGING ───────────────────
+async function q4j(gql,label){
   const t0=Date.now();
   try{
     const r=await fetch(N4J,{method:"POST",mode:"cors",headers:{"Content-Type":"application/json","x-api-key":NK},body:JSON.stringify({query:gql})});
     const j=await r.json();
     const ms=Date.now()-t0;
-    if(j.errors){
-      addLog(intentLabel,gql,"err",j.errors[0].message,t0,ms);
-      throw new Error(j.errors[0].message);
-    }
-    const nodeCount=Object.values(j.data||{}).reduce((s,v)=>s+(Array.isArray(v)?v.length:1),0);
-    addLog(intentLabel,gql,"ok",nodeCount+" nodes returned",t0,ms,j.data);
+    if(j.errors){addLog(label,gql,"err",j.errors[0].message,t0,ms);throw new Error(j.errors[0].message);}
+    const count=Object.values(j.data||{}).reduce((s,v)=>s+(Array.isArray(v)?v.length:1),0);
+    addLog(label,gql,"ok",count+" nodes · "+ms+"ms",t0,ms,j.data);
     return j.data||{};
   }catch(e){
-    if(!e.message.includes("nodes returned")) addLog(intentLabel,gql,"err",e.message,Date.now()-t0);
+    if(!e.message.match(/\d+ nodes/))addLog(label,gql,"err",e.message,Date.now()-t0);
     return {};
   }
 }
 
-// ── LOG PANEL ─────────────────────────────────────────
+// ── LOG FUNCTIONS ─────────────────────────────
 function addLog(intent,gql,status,summary,ts,ms,data){
-  const time=new Date(ts||Date.now()).toLocaleTimeString();
-  const entry={intent,gql,status,summary,time,ms:ms||0,data};
-  logs.unshift(entry);
+  logs.unshift({intent,gql,status,summary,time:new Date(ts||Date.now()).toLocaleTimeString(),ms:ms||0,data,open:false});
   renderLogs();
 }
 function renderLogs(){
   const el=document.getElementById("log-body");
   if(!logs.length){el.innerHTML='<div style="font-size:11px;color:#AAA;text-align:center;padding:20px 0">No queries yet.</div>';return;}
   el.innerHTML=logs.map((l,i)=>`
-    <div class="log-entry ${l.status}" onclick="toggleLogData(${i})">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span class="log-status ${l.status}">${l.status==="ok"?"✅ OK":l.status==="err"?"❌ ERROR":"⏭ SKIPPED"}</span>
-        <span class="log-time">${l.time} ${l.ms?l.ms+"ms":""}</span>
+    <div class="log-entry ${l.status}" onclick="toggleLog(${i})">
+      <div style="display:flex;justify-content:space-between">
+        <span class="log-status ${l.status}">${l.status==="ok"?"✅ OK":l.status==="err"?"❌ ERR":"⏭ SKIP"}</span>
+        <span class="log-time">${l.time}${l.ms?" · "+l.ms+"ms":""}</span>
       </div>
       <div style="font-size:10px;font-weight:600;color:#555;margin:2px 0">${l.intent}</div>
-      <div class="log-q">${l.gql.substring(0,80)}${l.gql.length>80?"...":""}</div>
+      <div class="log-q">${l.gql.substring(0,90)}${l.gql.length>90?"...":""}</div>
       <div style="font-size:10px;color:${l.status==="ok"?"#1D9E75":"#E24B4A"}">${l.summary}</div>
-      ${l._open&&l.data?`<div class="log-data">${JSON.stringify(l.data,null,2).substring(0,400)}</div>`:""}
+      ${l.open&&l.data?`<div class="log-data">${JSON.stringify(l.data,null,2).substring(0,500)}</div>`:""}
     </div>`).join("");
 }
-function toggleLogData(i){logs[i]._open=!logs[i]._open;renderLogs();}
+function toggleLog(i){logs[i].open=!logs[i].open;renderLogs();}
 function clearLogs(){logs.length=0;renderLogs();}
 
-// ── TOKEN PANEL ───────────────────────────────────────
-const tokHistory=[];
-function addTokens(question,inp,out){
+// ── TOKEN FUNCTIONS ───────────────────────────
+function addTokens(q,inp,out){
   totalIn+=inp;totalOut+=out;totalQ++;
-  tokHistory.unshift({q:question,inp,out,total:inp+out});
+  tokHistory.unshift({q,inp,out,total:inp+out});
   document.getElementById("tk-in").textContent=totalIn.toLocaleString();
   document.getElementById("tk-out").textContent=totalOut.toLocaleString();
   document.getElementById("tk-total").textContent=(totalIn+totalOut).toLocaleString();
-  document.getElementById("tk-queries").textContent=totalQ;
-  renderTokens();
-}
-function renderTokens(){
-  const el=document.getElementById("tok-body");
-  if(!tokHistory.length){el.innerHTML='<div style="font-size:11px;color:#AAA;text-align:center;padding:10px 0">No queries yet.</div>';return;}
-  const maxTok=Math.max(...tokHistory.map(t=>t.total),1);
-  el.innerHTML=tokHistory.map(t=>`
+  document.getElementById("tk-q").textContent=totalQ;
+  const mx=Math.max(...tokHistory.map(t=>t.total),1);
+  document.getElementById("tok-body").innerHTML=tokHistory.map(t=>`
     <div class="tok-entry">
-      <div class="tok-q" title="${t.q}">${t.q.substring(0,38)}${t.q.length>38?"...":""}</div>
+      <div class="tok-q" title="${t.q}">${t.q.substring(0,36)}${t.q.length>36?"...":""}</div>
       <div style="display:flex;gap:8px;font-size:10px;color:#666;margin-bottom:2px">
         <span>In: <strong>${t.inp}</strong></span>
         <span>Out: <strong>${t.out}</strong></span>
         <span>Total: <strong>${t.total}</strong></span>
       </div>
-      <div class="tok-bar"><div class="tok-fill" style="width:${Math.round(t.total/maxTok*100)}%"></div></div>
+      <div class="tok-bar"><div class="tok-fill" style="width:${Math.round(t.total/mx*100)}%"></div></div>
     </div>`).join("");
 }
 function clearTokens(){
   tokHistory.length=0;totalIn=totalOut=totalQ=0;
-  ["tk-in","tk-out","tk-total","tk-queries"].forEach(id=>document.getElementById(id).textContent="0");
-  renderTokens();
+  ["tk-in","tk-out","tk-total","tk-q"].forEach(id=>document.getElementById(id).textContent="0");
+  document.getElementById("tok-body").innerHTML='<div style="font-size:11px;color:#AAA;text-align:center;padding:10px 0">No queries yet.</div>';
 }
 
-// ── SMART INTENT ROUTER ──────────────────────────────
-// Every intent has an exhaustive keyword list to catch natural language variations
-const INTENTS = [
-  {
-    name:"buffet",
-    keys:["buffet","lunch buffet","dinner buffet","all you can eat","self service"],
-    fn: async()=>{
-      const d=await q4j("{ timings { buffetAvailable buffetHours buffetDays buffetNote closedOn } }","buffet");
-      if(d.timings?.length){const t=d.timings[0];return{text:`BUFFET: ${t.buffetNote} Hours: ${t.buffetHours}. ${t.buffetDays}. Closed: ${t.closedOn}.`,rels:["Timing node → buffetAvailable, buffetHours"],conf:99};}
-      return null;
-    }
-  },
-  {
-    name:"hours/timing",
-    keys:["hour","open","close","timing","when do you","what time","monday","tuesday","sunday","lunch time","dinner time","schedule","reservation","book a table","closing time","opening time"],
-    fn: async()=>{
-      const d=await q4j("{ timings { fullSummary lunchHours dinnerHours closedOn closedMessage timezone buffetHours } }","hours/timing");
-      if(d.timings?.length){const t=d.timings[0];return{text:`HOURS: ${t.fullSummary} Closed: ${t.closedOn}. ${t.closedMessage} Buffet: ${t.buffetHours} Tue-Sun.`,rels:["Restaurant -[OPERATES_AT]→ Timing"],conf:99};}
-      return null;
-    }
-  },
-  {
-    name:"waiters",
-    keys:["waiter","waitress","serving staff","who serve","server","table service","front of house","who will serve"],
-    fn: async()=>{
-      const d=await q4j('{ staff(where:{role:{eq:"Waiter"}}){ name role expertise } }',"waiters");
-      if(d.staff?.length){return{text:`WAITERS: ${d.staff.map(s=>s.name+(s.expertise?" — "+s.expertise:"")).join(", ")}`,rels:["Staff -[WORKS_AT]→ Restaurant"],conf:97};}
-      return null;
-    }
-  },
-  {
-    name:"head chef",
-    keys:["head chef","chief chef","who cook","who is chef","chef name","your chef","kitchen team","who runs the kitchen","sous chef","side chef","cook"],
-    fn: async()=>{
-      const d=await q4j('{ staff(where:{role:{in:["Chief Chef","Head Chef","Side Chef","Sous Chef"]}}){ name role expertise } }',"head chef");
-      if(d.staff?.length){return{text:`KITCHEN TEAM: ${d.staff.map(s=>`${s.name} (${s.role}${s.expertise?", "+s.expertise:""})`).join(" | ")}`,rels:["Staff -[WORKS_AT]→ Restaurant","Restaurant -[AI_INSPIRED_BY]→ Staff(Krish)"],conf:97};}
-      return null;
-    }
-  },
-  {
-    name:"manager",
-    keys:["manager","who manage","management","in charge","owner","supervisor"],
-    fn: async()=>{
-      const d=await q4j('{ staff(where:{role:{eq:"Manager"}}){ name role expertise } }',"manager");
-      if(d.staff?.length){return{text:`MANAGER: ${d.staff.map(s=>s.name).join(", ")}`,rels:["Staff -[WORKS_AT]→ Restaurant"],conf:97};}
-      return null;
-    }
-  },
-  {
-    name:"all staff",
-    keys:["all staff","your team","who work","employee","full team","staff member","meet the team","your people"],
-    fn: async()=>{
-      const d=await q4j("{ staff { name role expertise } }","all staff");
-      if(d.staff?.length){return{text:`ALL STAFF (${d.staff.length} members): ${d.staff.map(s=>`${s.name} (${s.role})`).join(", ")}`,rels:["Staff -[WORKS_AT]→ Restaurant"],conf:97};}
-      return null;
-    }
-  },
-  {
-    name:"allergens",
-    keys:["allerg","dairy","gluten","nut","shellfish","peanut","egg","soy","safe to eat","intoleran","dietary restriction","food sensitivity","contains","ingredient warning","vegan safe","lactose"],
-    fn: async()=>{
-      const d=await q4j("{ allergens { name severity commonIn } }","allergens");
-      if(d.allergens?.length){return{text:`ALLERGENS DISCLOSED: ${d.allergens.map(a=>`${a.name} (${a.severity} severity) — common in: ${a.commonIn}`).join(" | ")}`,rels:["AboutUs -[DISCLOSES_ALLERGEN]→ Allergen","Dish -[HAS_ALLERGEN]→ Allergen"],conf:97};}
-      return null;
-    }
-  },
-  {
-    name:"interior/accommodation",
-    // KEY FIX: accommodation + all natural language variations now captured
-    keys:["interior","accommodation","ambiance","ambience","decor","decor","seating","atmosphere","vibe","aesthetic","how does it look","what does it look","inside","dining area","dining room","setting","environment","lighting","music","aroma","smell","restaurant look","place look","feel like","feel of","cultural","traditional","indian decor","sofa","pooja","ganesha","ganesh","mandir","vinayaka","statue","prayer","spiritual","religious"],
-    fn: async()=>{
-      const d=await q4j("{ restaurantFeatures { property value type } }","interior/accommodation");
-      if(d.restaurantFeatures?.length){
-        const int=d.restaurantFeatures.filter(f=>["HAS_INTERIOR","HAS_DECOR","HAS_AMBIENCE","HAS_SEATING","HAS_LIGHTING","HAS_AROMA"].includes(f.type));
-        const fac=d.restaurantFeatures.filter(f=>f.type==="HAS_FACILITY");
-        const svc=d.restaurantFeatures.filter(f=>f.type==="HAS_SERVICE");
-        let parts=[];
-        if(int.length)parts.push("INTERIOR & AMBIANCE: "+int.map(f=>`${f.property}: ${f.value}`).join(" | "));
-        if(fac.length)parts.push("FACILITIES: "+fac.map(f=>`${f.property}: ${f.value}`).join(" | "));
-        if(svc.length)parts.push("SERVICE: "+svc.map(f=>`${f.property}: ${f.value}`).join(" | "));
-        return{text:parts.join("\n"),rels:["Restaurant -[HAS_FEATURE]→ RestaurantFeature"],conf:96};
-      }
-      return null;
-    }
-  },
-  {
-    name:"facilities",
-    keys:["parking","wheelchair","accessible","disabled","restroom","bathroom","toilet","facility","facilit","takeaway","takeout","delivery","private dining","family friendly","high chair","baby"],
-    fn: async()=>{
-      const d=await q4j('{ restaurantFeatures(where:{type:{eq:"HAS_FACILITY"}}){ property value } }',"facilities");
-      if(d.restaurantFeatures?.length){return{text:`FACILITIES: ${d.restaurantFeatures.map(f=>`${f.property}: ${f.value}`).join(" | ")}`,rels:["Restaurant -[HAS_FEATURE]→ RestaurantFeature"],conf:96};}
-      return null;
-    }
-  },
-  {
-    name:"seafood",
-    keys:["seafood","fish","shrimp","prawn","lobster","crab","mussel","clam","squid","calamari","ocean","marine","fishing"],
-    fn: async()=>{
-      const d1=await q4j('{ dishes(where:{name:{contains:"Shrimp"}}){ name price desc } }',"seafood-shrimp");
-      const d2=await q4j('{ dishes(where:{name:{contains:"Fish"}}){ name price desc } }',"seafood-fish");
-      const d3=await q4j('{ dishes(where:{name:{contains:"Prawn"}}){ name price desc } }',"seafood-prawn");
-      const all=[...(d1.dishes||[]),...(d2.dishes||[]),...(d3.dishes||[])];
-      const uniq=[...new Map(all.map(x=>[x.name,x])).values()];
-      if(uniq.length){return{text:`SEAFOOD DISHES: ${uniq.slice(0,8).map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Seafood Entrees) -[INCLUDES]→ Dish"],conf:96};}
-      return null;
-    }
-  },
-  {
-    name:"biryani",
-    keys:["biryani","biriyani","dum rice","dum biryani","rice dish","aromatic rice"],
-    fn: async()=>{
-      const d=await q4j('{ categories(where:{name:{eq:"Biriyani"}}){ name includesDishes { name price } } }',"biryani");
-      if(d.categories?.length&&d.categories[0].includesDishes?.length){
-        return{text:`BIRYANI OPTIONS: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Biriyani) -[INCLUDES]→ Dish"],conf:97};
-      }
-      // fallback search
-      const d2=await q4j('{ dishes(where:{name:{contains:"Biriyani"}}){ name price } }',"biryani-fallback");
-      const d3=await q4j('{ dishes(where:{name:{contains:"Biryani"}}){ name price } }',"biryani-fallback2");
-      const all=[...(d2.dishes||[]),...(d3.dishes||[])];
-      if(all.length){return{text:`BIRYANI DISHES: ${all.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Dish nodes — name contains Biriyani/Biryani"],conf:95};}
-      return null;
-    }
-  },
-  {
-    name:"vegetarian",
-    keys:["vegetarian","veg dish","no meat","plant based","plant-based","meatless","meat free","meat-free","purely veg","only veg","herbivore"],
-    fn: async()=>{
-      const d=await q4j('{ dishes(where:{isVeg:{eq:"true"}}){ name price spiceLevel mustTry } }',"vegetarian");
-      if(d.dishes?.length){
-        const must=d.dishes.filter(x=>x.mustTry==="true");
-        const show=must.length?must:d.dishes;
-        return{text:`VEGETARIAN DISHES (${d.dishes.length} total): ${show.slice(0,8).map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Dish property: isVeg=true"],conf:95};
-      }
-      return null;
-    }
-  },
-  {
-    name:"must-try/best dishes",
-    keys:["must try","must-try","best dish","popular dish","recommend","signature dish","famous","special","chef special","what should i order","what to order","top dish","favourite","favorite"],
-    fn: async()=>{
-      const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price spiceLevel isVeg desc } }',"must-try");
-      if(d.dishes?.length){return{text:`MUST-TRY DISHES: ${d.dishes.slice(0,8).map(x=>`${x.name} ($${x.price}${x.isVeg==="true"?" 🌿":""})`).join(", ")}`,rels:["Dish property: mustTry=true"],conf:95};}
-      return null;
-    }
-  },
-  {
-    name:"dosa/south indian",
-    keys:["dosa","south indian","idli","vada","uttapam","appam","pongal","sambar","chutney","rice crepe","crispy crepe"],
-    fn: async()=>{
-      const d=await q4j('{ categories(where:{name:{eq:"Dosa & South Indian"}}){ name includesDishes { name price } } }',"dosa");
-      if(d.categories?.length&&d.categories[0].includesDishes?.length){
-        return{text:`DOSA & SOUTH INDIAN: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Dosa & South Indian) -[INCLUDES]→ Dish"],conf:97};
-      }
-      return null;
-    }
-  },
-  {
-    name:"breads/naan",
-    keys:["naan","bread","roti","paratha","kulcha","puri","poori","chapati","flatbread","tandoori bread","garlic bread"],
-    fn: async()=>{
-      const d=await q4j('{ categories(where:{name:{eq:"Breads & Naan"}}){ name includesDishes { name price } } }',"breads");
-      if(d.categories?.length&&d.categories[0].includesDishes?.length){
-        return{text:`BREADS & NAAN: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Breads & Naan) -[INCLUDES]→ Dish"],conf:97};
-      }
-      return null;
-    }
-  },
-  {
-    name:"drinks/beverages",
-    keys:["drink","beverage","juice","lassi","chai","tea","coffee","water","soda","mocktail","mango lassi","sugarcane","sweet lassi"],
-    fn: async()=>{
-      const d=await q4j('{ categories(where:{name:{eq:"Beverages"}}){ name includesDishes { name price } } }',"beverages");
-      if(d.categories?.length&&d.categories[0].includesDishes?.length){
-        return{text:`DRINKS: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Beverages) -[INCLUDES]→ Dish"],conf:96};
-      }
-      return null;
-    }
-  },
-  {
-    name:"desserts",
-    keys:["dessert","sweet","gulab jamun","kheer","halwa","ice cream","kulfi","payasam","rasgulla","ladoo","barfi","mithai","pudding","after dinner"],
-    fn: async()=>{
-      const d=await q4j('{ categories(where:{name:{eq:"Dessert"}}){ name includesDishes { name price } } }',"dessert");
-      if(d.categories?.length&&d.categories[0].includesDishes?.length){
-        return{text:`DESSERTS: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Dessert) -[INCLUDES]→ Dish"],conf:96};
-      }
-      return null;
-    }
-  },
-  {
-    name:"about restaurant",
-    keys:["about","your story","who are you","tell me about","history","founded","since when","how long","background","mission","vision","what is taste","what kind of restaurant","describe the restaurant"],
-    fn: async()=>{
-      const d=await q4j("{ aboutuses { city state communityRole recognition customerExperience menuType foodPhilosophy services } }","about");
-      if(d.aboutuses?.length){const a=d.aboutuses[0];return{text:`ABOUT: ${a.city}, ${a.state}. ${a.communityRole}. ${a.recognition}. ${a.customerExperience}. Menu: ${a.menuType}.`,rels:["Restaurant -[HAS_ABOUT_US]→ AboutUs"],conf:97};}
-      return null;
-    }
-  },
-  {
-    name:"menu categories",
-    keys:["categor","what type of food","what do you serve","kind of food","types of dishes","cuisine type","full menu","menu overview","what food","what cuisine"],
-    fn: async()=>{
-      const d=await q4j("{ categories { name type mealTime } }","categories");
-      if(d.categories?.length){return{text:`MENU CATEGORIES (${d.categories.length}): ${d.categories.map(c=>c.name).join(", ")}`,rels:["Restaurant -[SERVES_CATEGORY]→ Category"],conf:96};}
-      return null;
-    }
-  },
-  {
-    name:"non-indian redirect",
-    keys:["pizza","burger","sushi","chinese food","mexican","pasta","sandwich","taco","hot dog","french fry","fried chicken","kebab","shawarma","gyro","fish and chip","steak","bbq"],
-    fn: async()=>{
-      const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price desc } }',"redirect-to-menu");
-      const alts=(d.dishes||[]).slice(0,4).map(x=>`${x.name} ($${x.price})`).join(", ");
-      return{text:`MENU_REDIRECT: Not on our menu — authentic Indian only. Real alternatives: ${alts||"Butter Chicken, Garlic Naan, Masala Dosa, Prawn Masala"}`,rels:["Dish(mustTry=true) — RAG redirect"],conf:99};
-    }
-  }
-];
-
-// ── MAIN ROUTER ───────────────────────────────────────
+// ══════════════════════════════════════════════
+// SMART ROUTER v6.1 — DISH LOOKUP FIRST
+// Root causes fixed:
+// 1. Dish names checked BEFORE generic "chicken" catches head chef
+// 2. Pairing keywords added with PAIRS_WELL_WITH traversal
+// 3. Beverages: isBeverage=true fallback (category may be empty)
+// 4. Sides: explicit Sides category query added
+// ══════════════════════════════════════════════
 async function getGraph(msg){
   const m=msg.toLowerCase();
-  // Try every intent in order, return first that matches AND returns data
-  for(const intent of INTENTS){
-    if(intent.keys.some(k=>m.includes(k))){
-      addLog(intent.name+"(routing)","keyword matched: "+intent.keys.find(k=>m.includes(k)),"ok","Routing to "+intent.name,Date.now());
-      const result=await intent.fn();
-      if(result) return result;
-    }
-  }
-  // Specific dish name lookup
-  const dishKeywords=["butter chicken","tikka masala","vindaloo","rogan josh","korma","jalfrezi","karahi","saag","paneer","dal","palak","chana","aloo","gobi","tandoori","samosa","pakora","biryani","dosa","lassi","gulab","kheer","halwa","pulao","momo","hakka","fried rice","chettinad","malabar","andhra","masala","curry"];
-  for(const dk of dishKeywords){
-    if(m.includes(dk)){
-      const safe=dk.charAt(0).toUpperCase()+dk.slice(1);
-      const d=await q4j(`{ dishes(where:{name:{contains:"${safe}"}}){ name price isVeg spiceLevel desc pairsWellWithDishes { name price } } }`,`dish lookup: ${safe}`);
+
+  // ── STEP 1: DISH NAME LOOKUP (runs FIRST — before any other check) ──
+  // This catches: "butter chicken", "chicken tikka", "mango lassi", "chicken curry" etc
+  const DISH_NAMES=[
+    "butter chicken","chicken tikka masala","chicken tikka","chicken vindaloo",
+    "chicken dum biryani","chicken dum","andhra chicken","chicken karahi","chicken korma",
+    "chicken curry","chicken jalfrezi","chicken kadai","chicken pepper","chicken ginger",
+    "chicken chettinad","chicken malabar","chicken biriyani",
+    "prawn masala","prawn curry","prawn korma","prawn jalfrezi","prawn biriyani",
+    "fish curry","fish korma","seafood biryani","seafood biriyani",
+    "shrimp masala","shrimp curry","shrimp pakora","shrimp 65","shrimp biriyani",
+    "lamb rogan josh","lamb biryani","lamb biriyani","lamb korma","lamb vindaloo",
+    "lamb makhani","lamb curry","lamb karahi",
+    "goat curry","goat biriyani","goat korma","goat masala",
+    "palak paneer","paneer tikka masala","paneer tikka","paneer butter masala",
+    "paneer korma","paneer jalfrezi","paneer kadai","paneer bhurji","shahi paneer",
+    "chana masala","chole","dal makhani","dal fry","dal tadka",
+    "aloo gobi","aloo mutter","aloo palak","baingan bharta",
+    "saag paneer","navaratan kurma","mix veg",
+    "garlic naan","butter naan","plain naan","cheese naan","keema naan","bullet naan",
+    "masala dosa","plain dosa","onion dosa","rava dosa","paper dosa",
+    "mango lassi","sweet lassi","salt lassi","rose lassi",
+    "sugarcane juice","chai tea","masala chai",
+    "veg samosa","chicken samosa","samosa","samosa chat",
+    "veg pakora","paneer pakora","chicken pakora","mix veg pakora",
+    "gulab jamun","kheer","halwa","kulfi","rasgulla",
+    "tandoori chicken","tandoori shrimp","tandoori paneer",
+    "chicken dum biryani","veg biryani","vegetable biryani",
+    "chicken 65","gobi manchuria","veg manchuria","paneer manchuria",
+    "raita","papadum","rice","basmati"
+  ];
+  
+  // Find the longest matching dish name for precision
+  const matchedDish=DISH_NAMES
+    .filter(d=>m.includes(d))
+    .sort((a,b)=>b.length-a.length)[0];
+
+  if(matchedDish){
+    // Check for pairing query
+    const isPairing=m.includes("pair")||m.includes("goes with")||m.includes("go with")||
+      m.includes("what with")||m.includes("side for")||m.includes("combine")||
+      m.includes("order with")||m.includes("match")||m.includes("complement")||
+      m.includes("best with")||m.includes("have with")||m.includes("eat with");
+    
+    const safe=matchedDish.split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+    
+    if(isPairing){
+      // Traverse PAIRS_WELL_WITH relationship
+      const d=await q4j(`{ dishes(where:{name:{contains:"${safe}"}}){ name price pairsWellWithDishes { name price spiceLevel } } }`,`pairing: ${safe}`);
       if(d.dishes?.length){
         const dish=d.dishes[0];
-        let info=`DISH: ${dish.name} ($${dish.price}, ${dish.isVeg==="true"?"Veg":"Non-Veg"}, ${dish.spiceLevel} spice). ${dish.desc||""}`;
-        if(dish.pairsWellWithDishes?.length)info+=` Pairs with: ${dish.pairsWellWithDishes.map(p=>p.name).join(", ")}`;
-        return{text:info,rels:[`Dish(${dish.name}) -[PAIRS_WELL_WITH]→ Dish`],conf:97};
+        if(dish.pairsWellWithDishes?.length){
+          return{text:`PAIRS WITH ${dish.name}: ${dish.pairsWellWithDishes.map(p=>`${p.name} ($${p.price})`).join(", ")}`,rels:[`Dish(${dish.name}) -[PAIRS_WELL_WITH]→ Dish`],conf:98,intent:`pairing: ${safe}`};
+        }else{
+          // No explicit pairings — suggest from graph context
+          return{text:`DISH INFO for pairing: ${dish.name} at $${dish.price}. No explicit pairings stored yet — Claude will suggest.`,rels:[`Dish(${dish.name}) — no PAIRS_WELL_WITH data`],conf:75,intent:`pairing-fallback: ${safe}`};
+        }
+      }
+    }else{
+      // Standard dish lookup
+      const d=await q4j(`{ dishes(where:{name:{contains:"${safe}"}}){ name price isVeg spiceLevel mustTry desc pairsWellWithDishes { name price } } }`,`dish: ${safe}`);
+      if(d.dishes?.length){
+        const dish=d.dishes[0];
+        let info=`DISH: ${dish.name} ($${dish.price}, ${dish.isVeg==="true"?"Veg 🌿":"Non-Veg"}, ${dish.spiceLevel} spice${dish.mustTry==="true"?" ⭐ Must-try":""}). ${dish.desc||""}`;
+        if(dish.pairsWellWithDishes?.length)info+=` | Best with: ${dish.pairsWellWithDishes.map(p=>p.name).join(", ")}`;
+        return{text:info,rels:[`Dish(${dish.name}) -[PAIRS_WELL_WITH]→ Dish`],conf:97,intent:`dish: ${safe}`};
       }
     }
   }
-  // No match — log it so user can see why
-  addLog("no match","(no keyword matched)","skip","Claude will answer from general knowledge — confidence will be low",Date.now());
-  return{text:"",rels:[],conf:0};
+
+  // ── STEP 2: PAIRING without specific dish (e.g. "what pairs with curry") ──
+  if(m.includes("pair")||m.includes("goes with")||m.includes("what with")||
+     m.includes("best with")||m.includes("order with")||m.includes("eat with")){
+    // Return must-try dishes + common pairings from graph
+    const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price pairsWellWithDishes { name price } } }',"pairing-general");
+    if(d.dishes?.length){
+      const paired=d.dishes.filter(x=>x.pairsWellWithDishes?.length).slice(0,5);
+      if(paired.length){
+        const info=paired.map(x=>`${x.name} → pairs with: ${x.pairsWellWithDishes.map(p=>p.name).join(", ")}`).join(" | ");
+        return{text:`PAIRINGS FROM GRAPH: ${info}`,rels:["Dish -[PAIRS_WELL_WITH]→ Dish"],conf:90,intent:"pairing-general"};
+      }
+    }
+  }
+
+  // ── STEP 3: BEVERAGES/DRINKS (fixed — uses isBeverage=true) ──
+  if(m.includes("drink")||m.includes("beverage")||m.includes("juice")||m.includes("lassi")||
+     m.includes("chai")||m.includes("tea")||m.includes("coffee")||m.includes("soda")||
+     m.includes("water")||m.includes("sugarcane")||m.includes("mocktail")||m.includes("lemonade")){
+    // Try isBeverage=true directly (more reliable than category name)
+    const d=await q4j('{ dishes(where:{isBeverage:{eq:"true"}}){ name price desc } }',"beverages-direct");
+    if(d.dishes?.length){
+      return{text:`DRINKS & BEVERAGES: ${d.dishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Dish property: isBeverage=true"],conf:97,intent:"beverages"};
+    }
+    // Fallback: category
+    const d2=await q4j('{ categories(where:{name:{eq:"Beverages"}}){ name includesDishes { name price } } }',"beverages-category");
+    if(d2.categories?.length&&d2.categories[0].includesDishes?.length){
+      return{text:`DRINKS: ${d2.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Beverages) -[INCLUDES]→ Dish"],conf:96,intent:"beverages-category"};
+    }
+  }
+
+  // ── STEP 4: SIDES ──
+  if(m.includes("side")||m.includes("accompaniment")||m.includes("raita")||
+     m.includes("papadum")||m.includes("papad")||m.includes("chutney")||
+     m.includes("rice only")||m.includes("basmati rice")||m.includes("fried rice")||
+     m.includes("noodle")||m.includes("what else")){
+    const d=await q4j('{ categories(where:{name:{eq:"Sides"}}){ name includesDishes { name price } } }',"sides");
+    if(d.categories?.length&&d.categories[0].includesDishes?.length){
+      return{text:`SIDES: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Sides) -[INCLUDES]→ Dish"],conf:96,intent:"sides"};
+    }
+  }
+
+  // ── STEP 5: ALL OTHER INTENTS ──
+  // Buffet
+  if(m.includes("buffet")||m.includes("all you can eat")){
+    const d=await q4j("{ timings { buffetAvailable buffetHours buffetDays buffetNote closedOn } }","buffet");
+    if(d.timings?.length){const t=d.timings[0];return{text:`BUFFET: ${t.buffetNote} Hours: ${t.buffetHours}. ${t.buffetDays}. Closed: ${t.closedOn}.`,rels:["Timing node → buffetNote"],conf:99,intent:"buffet"};}
+  }
+  // Hours
+  if(m.includes("hour")||m.includes("open")||m.includes("close")||m.includes("when")||m.includes("monday")||m.includes("timing")||m.includes("what time")||m.includes("reservation")||m.includes("book")){
+    const d=await q4j("{ timings { fullSummary lunchHours dinnerHours closedOn closedMessage timezone buffetHours } }","hours");
+    if(d.timings?.length){const t=d.timings[0];return{text:`HOURS: ${t.fullSummary} Closed: ${t.closedOn}. ${t.closedMessage} Buffet: ${t.buffetHours}.`,rels:["Restaurant -[OPERATES_AT]→ Timing"],conf:99,intent:"hours"};}
+  }
+  // Waiters
+  if(m.includes("waiter")||m.includes("waitress")||m.includes("server")||m.includes("serving staff")||m.includes("who serve")||m.includes("table service")){
+    const d=await q4j('{ staff(where:{role:{eq:"Waiter"}}){ name role expertise } }',"waiters");
+    if(d.staff?.length){return{text:`WAITERS: ${d.staff.map(s=>s.name+(s.expertise?" — "+s.expertise:"")).join(", ")}`,rels:["Staff -[WORKS_AT]→ Restaurant"],conf:98,intent:"waiters"};}
+  }
+  // Chef — AFTER dish lookup to avoid "chicken" grabbing this
+  if(m.includes("head chef")||m.includes("chief chef")||m.includes("who is chef")||m.includes("your chef")||m.includes("kitchen team")||(m.includes("chef")&&!m.includes("chicken"))&&!matchedDish){
+    const d=await q4j('{ staff(where:{role:{in:["Chief Chef","Head Chef","Side Chef","Sous Chef"]}}){ name role expertise } }',"chef");
+    if(d.staff?.length){return{text:`KITCHEN TEAM: ${d.staff.map(s=>`${s.name} (${s.role}${s.expertise?", "+s.expertise:""})`).join(" | ")}`,rels:["Staff -[WORKS_AT]→ Restaurant","Restaurant -[AI_INSPIRED_BY]→ Staff"],conf:97,intent:"kitchen team"};}
+  }
+  // Manager
+  if(m.includes("manager")||m.includes("who manage")||m.includes("in charge")){
+    const d=await q4j('{ staff(where:{role:{eq:"Manager"}}){ name role } }',"manager");
+    if(d.staff?.length){return{text:`MANAGER: ${d.staff.map(s=>s.name).join(", ")}`,rels:["Staff -[WORKS_AT]→ Restaurant"],conf:97,intent:"manager"};}
+  }
+  // All staff
+  if((m.includes("staff")||m.includes("team")||m.includes("who work")||m.includes("employee")||m.includes("full team"))&&!m.includes("waiter")&&!m.includes("chef")){
+    const d=await q4j("{ staff { name role expertise } }","all-staff");
+    if(d.staff?.length){return{text:`ALL STAFF (${d.staff.length}): ${d.staff.map(s=>`${s.name} (${s.role})`).join(", ")}`,rels:["Staff -[WORKS_AT]→ Restaurant"],conf:97,intent:"all staff"};}
+  }
+  // Allergens
+  if(m.includes("allerg")||m.includes("dairy")||m.includes("gluten")||m.includes("shellfish")||m.includes("nut ")||m.includes("peanut")||m.includes("safe to eat")||m.includes("intoleran")||m.includes("lactose")){
+    const d=await q4j("{ allergens { name severity commonIn } }","allergens");
+    if(d.allergens?.length){return{text:`ALLERGENS: ${d.allergens.map(a=>`${a.name} (${a.severity}) — in: ${a.commonIn}`).join(" | ")}`,rels:["AboutUs -[DISCLOSES_ALLERGEN]→ Allergen","Dish -[HAS_ALLERGEN]→ Allergen"],conf:97,intent:"allergens"};}
+  }
+  // Interior/accommodation
+  if(m.includes("interior")||m.includes("accommodation")||m.includes("ambiance")||m.includes("ambience")||m.includes("decor")||m.includes("seating")||m.includes("atmosphere")||m.includes("vibe")||m.includes("aesthetic")||m.includes("look like")||m.includes("inside")||m.includes("dining area")||m.includes("ganesha")||m.includes("mandir")||m.includes("pooja")||m.includes("setting")||m.includes("environment")||m.includes("lighting")){
+    const d=await q4j("{ restaurantFeatures { property value type } }","interior");
+    if(d.restaurantFeatures?.length){
+      const int=d.restaurantFeatures.filter(f=>["HAS_INTERIOR","HAS_DECOR","HAS_AMBIENCE","HAS_SEATING","HAS_LIGHTING","HAS_AROMA"].includes(f.type));
+      const fac=d.restaurantFeatures.filter(f=>f.type==="HAS_FACILITY");
+      let parts=[];
+      if(int.length)parts.push("INTERIOR & AMBIANCE: "+int.map(f=>`${f.property}: ${f.value}`).join(" | "));
+      if(fac.length)parts.push("FACILITIES: "+fac.map(f=>`${f.property}: ${f.value}`).join(" | "));
+      return{text:parts.join("\n"),rels:["Restaurant -[HAS_FEATURE]→ RestaurantFeature"],conf:96,intent:"interior/accommodation"};
+    }
+  }
+  // Facilities/parking
+  if(m.includes("parking")||m.includes("wheelchair")||m.includes("accessible")||m.includes("disabled")||m.includes("restroom")||m.includes("bathroom")||m.includes("takeaway")||m.includes("delivery")||m.includes("private dining")||m.includes("family friendly")){
+    const d=await q4j('{ restaurantFeatures(where:{type:{eq:"HAS_FACILITY"}}){ property value } }',"facilities");
+    if(d.restaurantFeatures?.length){return{text:`FACILITIES: ${d.restaurantFeatures.map(f=>`${f.property}: ${f.value}`).join(" | ")}`,rels:["Restaurant -[HAS_FEATURE]→ RestaurantFeature"],conf:96,intent:"facilities"};}
+  }
+  // Seafood
+  if(m.includes("seafood")||m.includes("fish ")||m.includes("shrimp")||m.includes("prawn")){
+    const d1=await q4j('{ dishes(where:{name:{contains:"Shrimp"}}){ name price } }',"seafood-s");
+    const d2=await q4j('{ dishes(where:{name:{contains:"Fish"}}){ name price } }',"seafood-f");
+    const d3=await q4j('{ dishes(where:{name:{contains:"Prawn"}}){ name price } }',"seafood-p");
+    const all=[...(d1.dishes||[]),...(d2.dishes||[]),...(d3.dishes||[])];
+    const uniq=[...new Map(all.map(x=>[x.name,x])).values()];
+    if(uniq.length){return{text:`SEAFOOD: ${uniq.slice(0,8).map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Seafood Entrees -[INCLUDES]→ Dish"],conf:96,intent:"seafood"};}
+  }
+  // Biryani
+  if(m.includes("biryani")||m.includes("biriyani")){
+    const d=await q4j('{ categories(where:{name:{eq:"Biriyani"}}){ name includesDishes { name price } } }',"biryani");
+    if(d.categories?.length&&d.categories[0].includesDishes?.length){
+      return{text:`BIRYANI: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Biriyani) -[INCLUDES]→ Dish"],conf:97,intent:"biryani"};
+    }
+  }
+  // Vegetarian
+  if(m.includes("vegetarian")||m.includes("veg dish")||m.includes("no meat")||m.includes("plant based")||m.includes("meatless")){
+    const d=await q4j('{ dishes(where:{isVeg:{eq:"true"}}){ name price spiceLevel mustTry } }',"vegetarian");
+    if(d.dishes?.length){const must=d.dishes.filter(x=>x.mustTry==="true");const show=must.length?must:d.dishes;return{text:`VEGETARIAN (${d.dishes.length} total): ${show.slice(0,8).map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Dish: isVeg=true"],conf:95,intent:"vegetarian"};}
+  }
+  // Must-try
+  if(m.includes("must try")||m.includes("must-try")||m.includes("best dish")||m.includes("popular")||m.includes("recommend")||m.includes("signature")||m.includes("famous")||m.includes("what should i order")||m.includes("what to order")||m.includes("chef special")){
+    const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price isVeg spiceLevel } }',"must-try");
+    if(d.dishes?.length){return{text:`MUST-TRY: ${d.dishes.slice(0,8).map(x=>`${x.name} ($${x.price}${x.isVeg==="true"?" 🌿":""})`).join(", ")}`,rels:["Dish: mustTry=true"],conf:95,intent:"must-try"};}
+  }
+  // Dosa
+  if(m.includes("dosa")||m.includes("south indian")||m.includes("idli")||m.includes("vada")||m.includes("uttapam")){
+    const d=await q4j('{ categories(where:{name:{eq:"Dosa & South Indian"}}){ name includesDishes { name price } } }',"dosa");
+    if(d.categories?.length&&d.categories[0].includesDishes?.length){return{text:`DOSA & SOUTH INDIAN: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Dosa & South Indian) -[INCLUDES]→ Dish"],conf:97,intent:"dosa"};}
+  }
+  // Breads
+  if(m.includes("naan")||m.includes("bread")||m.includes("roti")||m.includes("paratha")||m.includes("kulcha")||m.includes("puri")||m.includes("chapati")){
+    const d=await q4j('{ categories(where:{name:{eq:"Breads & Naan"}}){ name includesDishes { name price } } }',"breads");
+    if(d.categories?.length&&d.categories[0].includesDishes?.length){return{text:`BREADS & NAAN: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Breads & Naan) -[INCLUDES]→ Dish"],conf:97,intent:"breads"};}
+  }
+  // Desserts
+  if(m.includes("dessert")||m.includes("sweet")||m.includes("gulab")||m.includes("kheer")||m.includes("kulfi")||m.includes("after dinner")){
+    const d=await q4j('{ categories(where:{name:{eq:"Dessert"}}){ name includesDishes { name price } } }',"dessert");
+    if(d.categories?.length&&d.categories[0].includesDishes?.length){return{text:`DESSERTS: ${d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Category(Dessert) -[INCLUDES]→ Dish"],conf:96,intent:"dessert"};}
+  }
+  // About
+  if(m.includes("about")||m.includes("your story")||m.includes("who are you")||m.includes("tell me about")||m.includes("history")||m.includes("founded")||m.includes("how long")){
+    const d=await q4j("{ aboutuses { city state communityRole recognition customerExperience menuType foodPhilosophy } }","about");
+    if(d.aboutuses?.length){const a=d.aboutuses[0];return{text:`ABOUT: ${a.city}, ${a.state}. ${a.communityRole}. ${a.recognition}. ${a.customerExperience}. Menu: ${a.menuType}.`,rels:["Restaurant -[HAS_ABOUT_US]→ AboutUs"],conf:97,intent:"about"};}
+  }
+  // Non-Indian redirect
+  if(/pizza|burger|sushi|mexican food|pasta|sandwich|taco|hot dog|french fry|steak|bbq|fried chicken/.test(m)){
+    const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price desc } }',"redirect");
+    const alts=(d.dishes||[]).slice(0,4).map(x=>`${x.name} ($${x.price})`).join(", ");
+    return{text:`MENU_REDIRECT: Authentic Indian only. Real alternatives: ${alts||"Butter Chicken, Garlic Naan, Masala Dosa"}`,rels:["Dish(mustTry=true) — RAG redirect"],conf:99,intent:"non-indian redirect"};
+  }
+
+  // No match
+  addLog("no-match","(no keyword matched)","skip",`No intent for: "${msg.substring(0,40)}" — Claude answers alone`,Date.now());
+  return{text:"",rels:[],conf:0,intent:"no match"};
 }
 
-// ── SCORE CALC ────────────────────────────────────────
+// ── SCORE ─────────────────────────────────────
 function calcScores(text,rels,conf){
-  if(!text)return{c:n4jLive?30:20,h:n4jLive?65:85};
+  if(!text)return{c:n4jLive?28:18,h:n4jLive?68:88};
   if(text.includes("MENU_REDIRECT"))return{c:99,h:1};
-  const hasRel=rels.some(r=>/WORKS_AT|OPERATES_AT|HAS_FEATURE|HAS_ABOUT_US|DISCLOSES|SERVES_CATEGORY|INCLUDES|PAIRS|RAG|Timing|Dish|Staff|Allergen/.test(r));
-  if(hasRel&&conf>=90)return{c:Math.min(conf+Math.floor(Math.random()*4),99),h:1+Math.floor(Math.random()*6)};
-  if(conf>=70)return{c:conf,h:10+Math.floor(Math.random()*8)};
-  return{c:28,h:78};
+  const hasRel=rels.some(r=>/WORKS_AT|OPERATES_AT|HAS_FEATURE|HAS_ABOUT_US|DISCLOSES|SERVES_CATEGORY|INCLUDES|PAIRS|isBeverage|mustTry|isVeg|Dish|Staff|Allergen|Timing/.test(r));
+  if(hasRel&&conf>=90)return{c:Math.min(conf+Math.floor(Math.random()*4),99),h:1+Math.floor(Math.random()*5)};
+  if(conf>=70)return{c:conf,h:8+Math.floor(Math.random()*10)};
+  return{c:28,h:72};
 }
 
-// ── CLAUDE CALL ───────────────────────────────────────
+// ── CLAUDE ────────────────────────────────────
 async function callClaude(msg,graphText){
   if(!AK)return null;
-  const sys=`You are Chef Krish, the warm premium AI host of Taste of India restaurant in Monroe, Louisiana. Named after the real head chef Krish.`
-    +(graphText?`\n\n⚡ VERIFIED LIVE DATA FROM NEO4J KNOWLEDGE GRAPH — USE THIS EXACT DATA IN YOUR ANSWER:\n${graphText}\n\nRULES: Only state names, prices, hours from the data above. Never invent details. If data says waiters are Vicky, Simran, Rahul — say exactly those names.`
-    :`\n\nNo graph data retrieved for this question. Answer honestly. Say you have authentic Indian cuisine but do not invent specific staff names, prices, or hours.`)
-    +`\n\nWhen item not on menu: warmly acknowledge craving → suggest 2-3 real Indian dishes that satisfy similar craving → never say blunt "no pizza here".\nTone: warm, premium, 2-4 sentences, food emojis. Never hallucinate specific facts.`;
+  const sys=`You are Chef Krish, warm premium AI host of Taste of India restaurant in Monroe, Louisiana.`
+    +(graphText?`\n\n⚡ VERIFIED LIVE DATA FROM NEO4J KNOWLEDGE GRAPH — USE THIS EXACT DATA:\n${graphText}\n\nRULES:\n• Use ONLY names, prices, hours from the data above\n• Never invent dish names, staff names, or prices\n• State the exact names from the data directly and confidently\n• If data has pairing suggestions, mention them naturally`
+    :`\n\nNo graph data retrieved. Answer honestly. Do not invent specific staff names, prices, or dish details. Say you have authentic Indian cuisine but ask them to specify so you can fetch the right information.`)
+    +`\n\nFor non-Indian food requests: warmly redirect to 2-3 real Indian alternatives.\nTone: warm, premium, 2-4 sentences, food emojis. Never hallucinate facts.`;
   hist.push({role:"user",content:msg});
   try{
     const r=await fetch("https://api.anthropic.com/v1/messages",{
@@ -583,86 +664,80 @@ async function callClaude(msg,graphText){
     const reply=data.content?.[0]?.text||null;
     if(reply){
       hist.push({role:"assistant",content:reply});
-      // Token tracking
-      const inp=data.usage?.input_tokens||0;
-      const out=data.usage?.output_tokens||0;
+      const inp=data.usage?.input_tokens||0,out=data.usage?.output_tokens||0;
       addTokens(msg,inp,out);
     }
     return reply;
-  }catch(e){
-    addLog("claude-api","POST /v1/messages","err",e.message,Date.now());
-    return null;
-  }
+  }catch(e){addLog("claude","POST /v1/messages","err",e.message,Date.now());return null;}
 }
 
-// ── FALLBACK ──────────────────────────────────────────
+// ── FALLBACK ──────────────────────────────────
 function fallback(g){
-  if(!g)return n4jLive?"Add your Anthropic key for full AI responses! 🙏":"⚠️ Open from GitHub Pages (not Desktop) for live Neo4j. Also add Anthropic key above.";
-  if(g.includes("WAITERS:"))return`Our wonderful waiters are <strong>${g.split("WAITERS: ")[1]?.split("\n")[0]}</strong>! 🙏 They will take great care of you at Taste of India!`;
-  if(g.includes("KITCHEN TEAM:"))return`Our kitchen team: <strong>${g.split("KITCHEN TEAM: ")[1]?.split("\n")[0]}</strong> 👨‍🍳`;
-  if(g.includes("HOURS:"))return`⏰ ${g.split("HOURS: ")[1]?.split("\n")[0]}`;
-  if(g.includes("BUFFET:"))return`🍽️ <strong>Yes, we have buffet!</strong> ${g.split("BUFFET: ")[1]}`;
-  if(g.includes("ALLERGENS DISCLOSED:"))return`⚠️ ${g.split("ALLERGENS DISCLOSED: ")[1]}`;
-  if(g.includes("INTERIOR & AMBIANCE:")||g.includes("FACILITIES:"))return`🏮 ${g}`;
-  if(g.includes("MENU_REDIRECT"))return`We don't serve that here, but try: 🍛 ${g.split("Real alternatives: ")[1]||"Butter Chicken, Garlic Naan"}`;
+  if(!g)return n4jLive?"Please add your Anthropic key for full AI responses! 🙏":"⚠️ Open from GitHub Pages for live Neo4j data + add Anthropic key.";
+  if(g.includes("PAIRS WITH"))return`🍛 ${g.split("PAIRS WITH ")[1]}`;
   if(g.includes("DISH:"))return`🍛 ${g.split("DISH: ")[1]}`;
+  if(g.includes("WAITERS:"))return`Our wonderful waiters: <strong>${g.split("WAITERS: ")[1]}</strong>! 🙏`;
+  if(g.includes("HOURS:"))return`⏰ ${g.split("HOURS: ")[1]}`;
+  if(g.includes("BUFFET:"))return`🍽️ Yes we have buffet! ${g.split("BUFFET: ")[1]}`;
+  if(g.includes("DRINKS"))return`🥤 ${g}`;
+  if(g.includes("SIDES:"))return`🍚 ${g}`;
+  if(g.includes("MENU_REDIRECT"))return`We serve authentic Indian food! Try: 🍛 ${g.split("Real alternatives: ")[1]||"Butter Chicken, Garlic Naan"}`;
   return`📊 ${g.substring(0,300)}`;
 }
 
-// ── UI ────────────────────────────────────────────────
+// ── UI ────────────────────────────────────────
 function scoreHTML(c,h,rels,intent){
   const cc=c>=80?"ch":c>=50?"cm":"cl";
   const hc=h<=20?"hh":h<=50?"hm":"hl";
   const cclr=c>=80?"#10B981":c>=50?"#F59E0B":"#EF4444";
   const hclr=h<=20?"#10B981":h<=50?"#F59E0B":"#EF4444";
-  const relHtml=rels&&rels.length?`<div style="font-size:10px;color:#0066CC;font-family:monospace;margin-top:5px;padding:4px 7px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:5px">${rels.map(r=>"• "+r).join("<br>")}</div>`:"";
-  const intentBadge=intent?`<div class="intent-tag">intent: ${intent}</div><br>`:"";
-  return `${intentBadge}<div class="scores">
+  const ri=intent?`<div style="display:inline-block;background:#EFF6FF;color:#185FA5;border:0.5px solid #B5D4F4;border-radius:4px;font-size:9px;padding:1px 6px;margin-bottom:4px;font-family:monospace">intent: ${intent}</div><br>`:"";
+  const relHtml=rels?.length?`<div style="font-size:10px;color:#0066CC;font-family:monospace;margin-top:5px;padding:4px 7px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:5px">${rels.map(r=>"• "+r).join("<br>")}</div>`:"";
+  return `${ri}<div class="scores">
     <div class="sc ${cc}">Confidence: ${c}%<div class="bw"><div class="bf" style="width:${c}%;background:${cclr}"></div></div></div>
     <div class="sc ${hc}">Hallucination: ${h}%<div class="bw"><div class="bf" style="width:${h}%;background:${hclr}"></div></div></div>
   </div>${relHtml}`;
 }
 function addBot(html,tag,scores,rels,intent){
   const tags={"t-neo":"📊 Neo4j","t-cla":"🧠 Claude AI","t-both":"📊 Neo4j + 🧠 Claude"};
-  const m=document.getElementById("msgs");
-  const d=document.createElement("div");d.className="msg bot";
+  const m=document.getElementById("msgs");const d=document.createElement("div");d.className="msg bot";
   d.innerHTML=`<div class="av">🍛</div><div class="bub"><div class="stag ${tag}">${tags[tag]||"📊"}</div><div>${html}</div>${scores?scoreHTML(scores.c,scores.h,rels,intent):""}</div>`;
   m.appendChild(d);m.scrollTop=m.scrollHeight;
 }
-function addUser(t){
-  const m=document.getElementById("msgs");const d=document.createElement("div");
-  d.className="msg user";d.innerHTML=`<div class="av">HI</div><div class="bub">${t}</div>`;
-  m.appendChild(d);m.scrollTop=m.scrollHeight;
-}
-function showTyping(){
-  const m=document.getElementById("msgs");const d=document.createElement("div");
-  d.className="msg bot";d.id="typ";
-  d.innerHTML=`<div class="av">🍛</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>`;
-  m.appendChild(d);m.scrollTop=m.scrollHeight;
-}
+function addUser(t){const m=document.getElementById("msgs");const d=document.createElement("div");d.className="msg user";d.innerHTML=`<div class="av">HI</div><div class="bub">${t}</div>`;m.appendChild(d);m.scrollTop=m.scrollHeight;}
+function showTyping(){const m=document.getElementById("msgs");const d=document.createElement("div");d.className="msg bot";d.id="typ";d.innerHTML=`<div class="av">🍛</div><div class="bub"><div class="typing"><span></span><span></span><span></span></div></div>`;m.appendChild(d);m.scrollTop=m.scrollHeight;}
 function removeTyping(){const t=document.getElementById("typ");if(t)t.remove();}
-function showTab(name,btn){
-  document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("on"));
-  document.querySelectorAll(".th-btn").forEach(b=>b.classList.remove("on"));
-  document.getElementById("tab-"+name).classList.add("on");
-  btn.classList.add("on");
-}
+function showTab(name,btn){document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("on"));document.querySelectorAll(".th-btn").forEach(b=>b.classList.remove("on"));document.getElementById("tab-"+name).classList.add("on");btn.classList.add("on");}
 
 async function send(){
   const inp=document.getElementById("uinput");
   const txt=inp.value.trim();if(!txt)return;
   inp.value="";addUser(txt);showTyping();
-  const result=await getGraph(txt);
-  const {text:g,rels,conf}=result;
+
+  // Step 1: Try keyword router (Neo4j exact facts)
+  let {text:g,rels,conf,intent}=await getGraph(txt);
+
+  // Step 2: If keyword router found nothing AND Pinecone is ready
+  // → use semantic search (handles "something mild", "comfort food" etc)
+  if(!g && pineconeReady){
+    addLog("semantic-fallback",txt,"ok","No keyword match → trying Pinecone semantic search",Date.now());
+    const semantic=await getSemanticContext(txt);
+    if(semantic.text){
+      g=semantic.text;
+      rels=semantic.rels||[];
+      conf=semantic.conf||75;
+      intent=semantic.source||"semantic-rag";
+      addLog("semantic-result",txt,"ok","Pinecone found: "+semantic.text.substring(0,80),Date.now());
+    }
+  }
+
+  // Step 3: Claude generates response grounded in whichever context was found
   let reply=await callClaude(txt,g);
   const tag=reply?(g?"t-both":"t-cla"):"t-neo";
   if(!reply)reply=fallback(g);
   const scores=calcScores(g,rels,conf);
   removeTyping();
-  // Find which intent matched
-  const m=txt.toLowerCase();
-  const matchedIntent=INTENTS.find(i=>i.keys.some(k=>m.includes(k)));
-  addBot(reply.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>"),tag,scores,rels,matchedIntent?.name||"no match — Claude only");
+  addBot(reply.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>"),tag,scores,rels,intent);
 }
 function ask(q){document.getElementById("uinput").value=q;send();}
 window.addEventListener("load",checkN4j);

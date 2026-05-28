@@ -643,7 +643,7 @@ async function getGraph(msg){
     if(d.dishes?.length){const must=d.dishes.filter(x=>x.mustTry==="true");const show=must.length?must:d.dishes;return{text:`VEGETARIAN (${d.dishes.length} total): ${show.slice(0,8).map(x=>`${x.name} ($${x.price})`).join(", ")}`,rels:["Dish: isVeg=true"],conf:95,intent:"vegetarian"};}
   }
   // Must-try
-  if(m.includes("must try")||m.includes("must-try")||m.includes("best dish")||m.includes("popular")||m.includes("recommend")||m.includes("signature")||m.includes("famous")||m.includes("what should i order")||m.includes("what to order")||m.includes("chef special")){
+  if(m.includes("must try")||m.includes("must-try")||m.includes("best dish")||m.includes("popular")||m.includes("recommend")||m.includes("signature")||m.includes("famous")||m.includes("what should i order")||m.includes("what to order")||m.includes("chef special")||m.includes("mild")||m.includes("not spicy")||m.includes("not too spicy")||m.includes("light dish")||m.includes("gentle spice")||m.includes("low spice")||m.includes("something to eat")||m.includes("what to eat")||m.includes("comfort food")||m.includes("something good")){
     const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price isVeg spiceLevel } }',"must-try");
     if(d.dishes?.length){return{text:`MUST-TRY: ${d.dishes.slice(0,8).map(x=>`${x.name} ($${x.price}${x.isVeg==="true"?" 🌿":""})`).join(", ")}`,rels:["Dish: mustTry=true"],conf:95,intent:"must-try"};}
   }
@@ -700,7 +700,7 @@ async function callClaude(msg,graphText){
   if(!AK)return null;
   const sys=`You are Chef Krish, warm premium AI host of Taste of India restaurant in Monroe, Louisiana.`
     +(graphText?`\n\n⚡ VERIFIED LIVE DATA FROM NEO4J KNOWLEDGE GRAPH — USE THIS EXACT DATA:\n${graphText}\n\nRULES:\n• Use ONLY names, prices, hours from the data above\n• Never invent dish names, staff names, or prices\n• State the exact names from the data directly and confidently\n• If data has pairing suggestions, mention them naturally`
-    :`\n\nNo graph data retrieved. Be honest — do NOT invent dish names, prices, or staff. You may say we have authentic Indian cuisine but cannot confirm specific items without live data.`)
+    :`\n\nNO GRAPH DATA AVAILABLE FOR THIS QUESTION.\n\nCRITICAL RULES WHEN NO DATA:\n• Do NOT mention any specific dish by name — not Butter Chicken, not Beef Curry, not any dish\n• Do NOT suggest we serve beef, pork, or any non-Indian food\n• We are a 100% authentic Indian restaurant — Hindu-owned, no beef ever\n• Simply say: "I don't have the specific menu details for that right now — let me suggest you ask our team directly or try asking about a specific Indian dish like biryani, curry, or dosa!"\n• If user asks something vague like "something mild", say you'd love to help and ask them to try: our curries, biryani, dosa, or paneer dishes`)
     +`\n\n🚨 ABSOLUTE RULES — NEVER BREAK THESE:\n• ZERO beef dishes. Taste of India is a Hindu Indian restaurant. Cows are sacred in Indian culture. We do not serve beef, ever. If anyone asks for beef, politely explain this and suggest Lamb or Chicken alternatives.\n• NEVER invent a dish name not in the data above. If data says "Butter Chicken" — say Butter Chicken. Never say "Beef Curry", "Beef Masala" or any beef dish.\n• NEVER invent prices, staff names, or hours not in the data.\n• When Pinecone semantic data is provided, name ONLY the specific dishes listed in that data.\n\nFor non-Indian requests: warmly redirect. For beef: explain cows are sacred and suggest Lamb Rogan Josh or Chicken Tikka Masala.\nTone: warm, premium, 2-4 sentences, food emojis.`;
   hist.push({role:"user",content:msg});
   try{
@@ -763,11 +763,15 @@ async function send(){
   const inp=document.getElementById("uinput");
   const txt=inp.value.trim();if(!txt)return;
   inp.value="";addUser(txt);showTyping();
-  // BEEF GUARD — catch before any routing
-  if(/\bbeef\b/i.test(txt)){
+  // BEEF GUARD — catch all beef references before any routing
+  if(/\bbeef\b|beef curry|beef masala|beef dish|beef vindaloo|beef stew|beef burger|beef biryani|beef kebab|cow meat|veal/i.test(txt)){
     removeTyping();
-    addBot("🙏 We don't serve beef at Taste of India. In Indian Hindu culture, cows are sacred — symbols of life and abundance. We'd love to suggest our tender <strong>Lamb Rogan Josh</strong> or <strong>Chicken Tikka Masala</strong> as wonderful alternatives! Would either of those work for you? 🍛","t-cla",{c:99,h:1},[],   "beef-guard");
+    addBot("🙏 Namaste! We don't serve beef at Taste of India — in Hindu culture, cows are sacred symbols of life and abundance, so our menu honours that tradition completely. <br><br>May I suggest some wonderful alternatives? Our <strong>Lamb Rogan Josh</strong> ($17.99) is slow-cooked and incredibly tender, or our <strong>Chicken Tikka Masala</strong> ($15.99) is rich and aromatic. Both are absolute guest favourites! 🍛","t-both",{c:99,h:1},["Menu policy — no beef served at Taste of India"],"beef-guard");
     return;
+  }
+  // HALLUCINATION BLOCK — catch other non-Indian food before Claude guesses
+  if(/pork|pepperoni|bacon|ham|sausage|hot dog|burger|pizza|pasta|sushi|taco|burrito|kebab wrap|shawarma|gyro|lobster|crab|oyster/.test(txt.toLowerCase())){
+    // Let the redirect flow handle it — don't block, just flag
   }
 
   // Step 1: Try keyword router (Neo4j exact facts)

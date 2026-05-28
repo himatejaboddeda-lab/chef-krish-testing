@@ -674,8 +674,75 @@ async function getGraph(msg){
     return{text:`MENU_REDIRECT: Authentic Indian only. Real alternatives: ${alts||"Butter Chicken, Garlic Naan, Masala Dosa"}`,rels:["Dish(mustTry=true) — RAG redirect"],conf:99,intent:"non-indian redirect"};
   }
 
-  // No match
-  addLog("no-match","(no keyword matched)","skip",`No intent for: "${msg.substring(0,40)}" — Claude answers alone`,Date.now());
+  // GENERAL MENU / DISH BROWSE
+  if(m.includes("menu")||m.includes("dish")||m.includes("food")||m.includes("what do you have")||m.includes("what do you offer")||m.includes("what can i")||m.includes("show me")||m.includes("list")){
+    const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price isVeg spiceLevel desc } }','menu-browse');
+    if(d.dishes?.length){
+      return{text:"MENU HIGHLIGHTS (must-try dishes from Neo4j): "+d.dishes.map(x=>`${x.name} ($${x.price}, ${x.spiceLevel}${x.isVeg==="true"?" 🌿 veg":""})`).join(" | "),rels:["Dish nodes — mustTry=true"],conf:95,intent:"menu browse"};
+    }
+  }
+
+  // VEGAN
+  if(m.includes("vegan")){
+    const d=await q4j('{ dishes(where:{isVegan:{eq:"true"}}){ name price spiceLevel desc } }','vegan');
+    if(d.dishes?.length){
+      return{text:"VEGAN DISHES (Neo4j isVegan=true): "+d.dishes.map(x=>`${x.name} ($${x.price})`).join(", "),rels:["Dish: isVegan=true"],conf:96,intent:"vegan"};
+    }
+  }
+
+  // SPICE LEVEL — mild / medium / spicy / hot
+  if(m.includes("mild")||m.includes("not spicy")||m.includes("no spice")||m.includes("not too spicy")||m.includes("gentle")){
+    const d=await q4j('{ dishes(where:{spiceLevel:{eq:"Mild"}}){ name price isVeg desc } }','mild-dishes');
+    if(d.dishes?.length){
+      return{text:"MILD DISHES (Neo4j spiceLevel=Mild): "+d.dishes.map(x=>`${x.name} ($${x.price}${x.isVeg==="true"?" 🌿 veg":""})`).join(", "),rels:["Dish: spiceLevel=Mild"],conf:96,intent:"mild dishes"};
+    }
+  }
+  if(m.includes("spicy")||m.includes("hot dish")||m.includes("extra spicy")||m.includes("very spicy")){
+    const d=await q4j('{ dishes(where:{spiceLevel:{eq:"Hot"}}){ name price isVeg desc } }','hot-dishes');
+    if(d.dishes?.length){
+      return{text:"SPICY DISHES (Neo4j spiceLevel=Hot): "+d.dishes.map(x=>`${x.name} ($${x.price})`).join(", "),rels:["Dish: spiceLevel=Hot"],conf:96,intent:"spicy dishes"};
+    }
+  }
+  if(m.includes("medium")||m.includes("medium spice")){
+    const d=await q4j('{ dishes(where:{spiceLevel:{eq:"Medium"}}){ name price isVeg desc } }','medium-dishes');
+    if(d.dishes?.length){
+      return{text:"MEDIUM SPICE DISHES (Neo4j): "+d.dishes.map(x=>`${x.name} ($${x.price}${x.isVeg==="true"?" 🌿 veg":""})`).join(", "),rels:["Dish: spiceLevel=Medium"],conf:96,intent:"medium dishes"};
+    }
+  }
+
+  // LAMB / GOAT
+  if(m.includes("lamb")||m.includes("goat")||m.includes("mutton")){
+    const d1=await q4j('{ dishes(where:{name:{contains:"Lamb"}}){ name price spiceLevel desc } }','lamb');
+    const d2=await q4j('{ dishes(where:{name:{contains:"Goat"}}){ name price spiceLevel desc } }','goat');
+    const all=[...(d1.dishes||[]),...(d2.dishes||[])];
+    if(all.length){return{text:"LAMB/GOAT DISHES: "+all.map(x=>`${x.name} ($${x.price})`).join(", "),rels:["Dish name contains Lamb/Goat"],conf:96,intent:"lamb/goat"};}
+  }
+
+  // CHICKEN (without dish name — generic chicken query)
+  if(m.includes("chicken")&&!matchedDish){
+    const d=await q4j('{ dishes(where:{name:{contains:"Chicken"}}){ name price spiceLevel isVeg desc } }','chicken-generic');
+    if(d.dishes?.length){return{text:"CHICKEN DISHES: "+d.dishes.map(x=>`${x.name} ($${x.price}, ${x.spiceLevel})`).join(", "),rels:["Dish name contains Chicken"],conf:96,intent:"chicken dishes"};}
+  }
+
+  // STARTER / APPETIZER
+  if(m.includes("starter")||m.includes("appetizer")||m.includes("snack")||m.includes("small plate")){
+    const d=await q4j('{ categories(where:{name:{eq:"Appetizers"}}){ name includesDishes { name price } } }','starters');
+    if(d.categories?.length&&d.categories[0].includesDishes?.length){
+      return{text:"APPETIZERS/STARTERS: "+d.categories[0].includesDishes.map(x=>`${x.name} ($${x.price})`).join(", "),rels:["Category(Appetizers) -[INCLUDES]→ Dish"],conf:96,intent:"starters"};
+    }
+  }
+
+  // PRICE — cheap, budget, affordable, expensive
+  if(m.includes("cheap")||m.includes("budget")||m.includes("affordable")||m.includes("inexpensive")||m.includes("low price")){
+    const d=await q4j('{ dishes(where:{mustTry:{eq:"true"}}){ name price isVeg } }','budget');
+    if(d.dishes?.length){
+      const sorted=d.dishes.sort((a,b)=>parseFloat(a.price)-parseFloat(b.price));
+      return{text:"BUDGET-FRIENDLY DISHES (sorted by price): "+sorted.slice(0,6).map(x=>`${x.name} ($${x.price})`).join(", "),rels:["Dish nodes sorted by price"],conf:90,intent:"budget dishes"};
+    }
+  }
+
+  // No match — log it clearly
+  addLog("no-match","(no keyword matched)","skip",`No intent for: "${msg.substring(0,40)}" — trying Pinecone semantic search`,Date.now());
   return{text:"",rels:[],conf:0,intent:"no match"};
 }
 
@@ -698,7 +765,9 @@ function calcScores(text,rels,conf){
 // ── CLAUDE ────────────────────────────────────
 async function callClaude(msg,graphText){
   if(!AK)return null;
-  const sys=`You are Chef Krish, warm premium AI host of Taste of India restaurant in Monroe, Louisiana.`
+  const sys=`You are Chef Krish, AI host of Taste of India, Monroe Louisiana. Authentic Indian restaurant — NO BEEF ever (cows are sacred in Hindu culture).
+
+CRITICAL RULE: You ONLY know what is in the VERIFIED DATA below. If no data is provided, say "Let me check our menu for you — could you be more specific?" DO NOT list any dishes, prices, or staff names from memory. Every dish name and price you state MUST come from the data below.`
     +(graphText?`\n\n⚡ VERIFIED LIVE DATA FROM NEO4J KNOWLEDGE GRAPH — USE THIS EXACT DATA:\n${graphText}\n\nRULES:\n• Use ONLY names, prices, hours from the data above\n• Never invent dish names, staff names, or prices\n• State the exact names from the data directly and confidently\n• If data has pairing suggestions, mention them naturally`
     :`\n\nNO GRAPH DATA AVAILABLE FOR THIS QUESTION.\n\nCRITICAL RULES WHEN NO DATA:\n• Do NOT mention any specific dish by name — not Butter Chicken, not Beef Curry, not any dish\n• Do NOT suggest we serve beef, pork, or any non-Indian food\n• We are a 100% authentic Indian restaurant — Hindu-owned, no beef ever\n• Simply say: "I don't have the specific menu details for that right now — let me suggest you ask our team directly or try asking about a specific Indian dish like biryani, curry, or dosa!"\n• If user asks something vague like "something mild", say you'd love to help and ask them to try: our curries, biryani, dosa, or paneer dishes`)
     +`\n\n🚨 ABSOLUTE RULES — NEVER BREAK THESE:\n• ZERO beef dishes. Taste of India is a Hindu Indian restaurant. Cows are sacred in Indian culture. We do not serve beef, ever. If anyone asks for beef, politely explain this and suggest Lamb or Chicken alternatives.\n• NEVER invent a dish name not in the data above. If data says "Butter Chicken" — say Butter Chicken. Never say "Beef Curry", "Beef Masala" or any beef dish.\n• NEVER invent prices, staff names, or hours not in the data.\n• When Pinecone semantic data is provided, name ONLY the specific dishes listed in that data.\n\nFor non-Indian requests: warmly redirect. For beef: explain cows are sacred and suggest Lamb Rogan Josh or Chicken Tikka Masala.\nTone: warm, premium, 2-4 sentences, food emojis.`;
